@@ -3,9 +3,13 @@
   overflow: hidden;
   margin-bottom: 16px;
   padding: 20px;
-  border: 1px solid rgba(15,23,42,0.06);
+  border: 1px solid rgba(15, 23, 42, 0.06);
   border-radius: var(--radius);
-  background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,255,255,0.92));
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.98),
+    rgba(255, 255, 255, 0.92)
+  );
   box-shadow: var(--shadow-sm);
 }
 
@@ -26,7 +30,7 @@
 .card.inner {
   border: 1px solid var(--line);
   box-shadow: none;
-  background: rgba(248,250,252,0.82);
+  background: rgba(248, 250, 252, 0.82);
 }
 
 h3 {
@@ -74,13 +78,16 @@ h3 {
   cursor: pointer;
   font-size: 14px;
   font-weight: 700;
-  box-shadow: 0 8px 22px rgba(99,102,241,0.20);
-  transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+  box-shadow: 0 8px 22px rgba(99, 102, 241, 0.2);
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    filter 0.18s ease;
 }
 
 .btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 13px 28px rgba(99,102,241,0.26);
+  box-shadow: 0 13px 28px rgba(99, 102, 241, 0.26);
   filter: brightness(1.03);
 }
 
@@ -160,7 +167,11 @@ tbody tr {
 }
 
 tbody tr:hover {
-  background: linear-gradient(90deg, rgba(99,102,241,0.035), rgba(236,72,153,0.02));
+  background: linear-gradient(
+    90deg,
+    rgba(99, 102, 241, 0.035),
+    rgba(236, 72, 153, 0.02)
+  );
 }
 
 tbody tr:last-child td {
@@ -212,7 +223,9 @@ tbody tr:last-child td {
   margin: 0 -8px;
   border-bottom: 1px solid var(--line);
   border-radius: 10px;
-  transition: background 0.18s ease, transform 0.18s ease;
+  transition:
+    background 0.18s ease,
+    transform 0.18s ease;
 }
 
 .tl-item:last-child {
@@ -220,7 +233,11 @@ tbody tr:last-child td {
 }
 
 .tl-item:hover {
-  background: linear-gradient(90deg, rgba(99,102,241,0.04), rgba(236,72,153,0.025));
+  background: linear-gradient(
+    90deg,
+    rgba(99, 102, 241, 0.04),
+    rgba(236, 72, 153, 0.025)
+  );
   transform: translateX(3px);
 }
 
@@ -234,10 +251,18 @@ tbody tr:last-child td {
   background: linear-gradient(135deg, #eef2ff, #f5f3ff);
 }
 
-.tl-ic.income { background: linear-gradient(135deg, #e0f2fe, #ecfeff); }
-.tl-ic.request { background: linear-gradient(135deg, #fff7ed, #ffedd5); }
-.tl-ic.complaint { background: linear-gradient(135deg, #fff1f2, #fce7f3); }
-.tl-ic.user { background: linear-gradient(135deg, #eef2ff, #e0e7ff); }
+.tl-ic.income {
+  background: linear-gradient(135deg, #e0f2fe, #ecfeff);
+}
+.tl-ic.request {
+  background: linear-gradient(135deg, #fff7ed, #ffedd5);
+}
+.tl-ic.complaint {
+  background: linear-gradient(135deg, #fff1f2, #fce7f3);
+}
+.tl-ic.user {
+  background: linear-gradient(135deg, #eef2ff, #e0e7ff);
+}
 
 .tl-body {
   min-width: 0;
@@ -277,6 +302,86 @@ tbody tr:last-child td {
 }
 
 @keyframes toastIn {
-  from { opacity: 0; transform: translate(-50%, 10px) scale(0.97); }
-  to { opacity: 1; transform: translate(-50%, 0) scale(1); }
+  from {
+    opacity: 0;
+    transform: translate(-50%, 10px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+}
+/* =========================================================
+   APP INSTALL BUTTON
+========================================================= */
+
+.install-app-btn {
+  position: fixed;
+
+  right: 18px;
+  bottom: 18px;
+
+  z-index: 95;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  min-height: 44px;
+
+  padding: 10px 15px;
+
+  border: 1px solid rgba(255, 255, 255, 0.16);
+
+  border-radius: 14px;
+
+  background: linear-gradient(110deg, #4f46e5, #7c3aed 55%, #db2777);
+
+  color: #fff;
+
+  font-size: 12px;
+  font-weight: 800;
+
+  cursor: pointer;
+
+  box-shadow: 0 12px 30px rgba(79, 70, 229, 0.28);
+
+  backdrop-filter: blur(10px);
+
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    filter 0.18s ease;
+}
+
+.install-app-btn:hover {
+  transform: translateY(-2px);
+
+  box-shadow: 0 16px 36px rgba(79, 70, 229, 0.34);
+
+  filter: brightness(1.04);
+}
+
+.install-app-btn:active {
+  transform: translateY(0);
+}
+
+.install-app-icon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+@media (max-width: 600px) {
+  .install-app-btn {
+    right: 14px;
+    bottom: 14px;
+
+    min-height: 46px;
+
+    padding: 10px 14px;
+
+    border-radius: 13px;
+  }
 }
