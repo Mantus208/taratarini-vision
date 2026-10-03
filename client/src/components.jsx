@@ -631,62 +631,6 @@ export function CmpCard({ c, P }) {
           </button>
         </div>
       )}
-      {c.status === "Resolved" && (
-        <>
-          <br />
-
-          <span className="muted">
-            Resolved: {nm(c.resolvedBy)} · {fdt(c.resolved)} · {c.note}
-          </span>
-
-          {c.fieldVisit?.startLocation?.lat != null &&
-            c.fieldVisit?.startLocation?.lng != null && (
-              <>
-                <br />
-
-                <button
-                  type="button"
-                  className="btn sm gray"
-                  onClick={() =>
-                    openMap(
-                      c.fieldVisit.startLocation.lat,
-                      c.fieldVisit.startLocation.lng,
-                    )
-                  }
-                >
-                  📍 View Visit Start Location
-                </button>
-              </>
-            )}
-
-          {c.fieldVisit?.completeLocation?.lat != null &&
-            c.fieldVisit?.completeLocation?.lng != null && (
-              <button
-                type="button"
-                className="btn sm gray"
-                onClick={() =>
-                  openMap(
-                    c.fieldVisit.completeLocation.lat,
-                    c.fieldVisit.completeLocation.lng,
-                  )
-                }
-              >
-                📍 View Completion Location
-              </button>
-            )}
-
-          {c.fieldVisit?.hasPhoto && (
-            <button
-              type="button"
-              className="btn sm gray"
-              onClick={viewEvidence}
-              disabled={loadingEvidence}
-            >
-              📷 {loadingEvidence ? "Loading..." : "View Evidence"}
-            </button>
-          )}
-        </>
-      )}
     </div>
   );
 }
