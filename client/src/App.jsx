@@ -41,7 +41,7 @@ export default function App() {
   useEffect(() => {
     const f = () => {
       setMe(null);
-      toast("Session khatam, dobara login karein", true);
+      toast("Your session has expired. Please log in again.", true);
     };
     window.addEventListener("ao-logout", f);
     return () => window.removeEventListener("ao-logout", f);

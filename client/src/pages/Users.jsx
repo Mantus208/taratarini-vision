@@ -18,7 +18,9 @@ function UserCard({ u }) {
     });
 
   const reset = () => {
-    const p = prompt("Naya password daalo (min 6) - " + u.username);
+    const p = prompt(
+      "Enter a new password (minimum 6 characters) - " + u.username,
+    );
 
     if (p) {
       act(`/users/${u.username}/reset-password`, "POST", { newPass: p });
@@ -60,7 +62,7 @@ function UserCard({ u }) {
         <div className="permission-title">
           <div>
             <strong>Permissions</strong>
-            <span>Is user ko kya-kya access dena hai</span>
+            <span>Select the access this user should have</span>
           </div>
         </div>
 
@@ -96,7 +98,7 @@ function UserCard({ u }) {
         </button>
 
         <button type="button" className="btn sm gray" onClick={reset}>
-          🔑 Password reset
+          🔑 Reset Password
         </button>
       </div>
     </div>
@@ -112,11 +114,11 @@ export default function Users() {
         <div className="intro-icon">👥</div>
 
         <div>
-          <h3>Users aur Permissions</h3>
+          <h3>Users & Permissions</h3>
 
           <p className="muted">
-            Naye signup "Pending" me aate hain. Status "Active" karke
-            permissions tick karo aur Save dabao.
+            New signups appear as "Pending". Set the status to "Active", select
+            the required permissions, and click Save.
           </p>
         </div>
       </div>

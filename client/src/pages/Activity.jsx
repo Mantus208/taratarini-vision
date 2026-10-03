@@ -3,11 +3,11 @@ import { useFetch } from "../api";
 import { nm, fdt, ACT_ICON, ACT_GROUP } from "../utils";
 
 const FILTERS = [
-  ["all", "Sab"],
-  ["income", "💰 Paisa (income)"],
-  ["request", "💸 Requests / approval / kharid"],
+  ["all", "All"],
+  ["income", "💰 Money / Income"],
+  ["request", "💸 Requests / Approval / Purchase"],
   ["complaint", "🎫 Complaints"],
-  ["user", "👥 Users / login"],
+  ["user", "👥 Users / Login"],
 ];
 
 export default function Activity() {
@@ -22,8 +22,9 @@ export default function Activity() {
       <div className="card activity-intro">
         <h3>🕘 Activity Log</h3>
         <p className="muted">
-          Kisne, kab, kya kiya: yahan sab record hota hai. Ye record app se edit
-          ya delete nahi ho sakta. Aakhri 200 entries dikhti hain.
+          Who did what and when: all activities are recorded here. These records
+          cannot be edited or deleted from the app. Showing the latest 200
+          entries.
         </p>
         <div className="activity-filter">
           <label>Filter</label>
@@ -54,7 +55,7 @@ export default function Activity() {
           {!rows.length && (
             <div className="activity-empty">
               <div className="activity-empty-icon">📭</div>
-              <strong>Abhi koi activity nahi</strong>
+              <strong>No activity yet</strong>
             </div>
           )}
         </div>

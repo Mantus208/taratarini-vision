@@ -44,7 +44,7 @@ export default function Requests({ me }) {
     {
       key: "approved",
       title: "Approved",
-      subtitle: "Kharidna baaki",
+      subtitle: "Purchase Pending",
       icon: "✅",
       tone: "approved",
       items: list.filter((r) => r.status === "Approved"),
@@ -71,9 +71,9 @@ export default function Requests({ me }) {
             <div className="section-icon request-main-icon">💸</div>
 
             <div>
-              <h3>Naya Expense / Zarurat Request</h3>
+              <h3>New Expense / Requirement Request</h3>
 
-              <p>Kharcha ya kisi item ki requirement submit karein.</p>
+              <p>Submit an expense or item requirement.</p>
             </div>
           </div>
 
@@ -83,18 +83,17 @@ export default function Requests({ me }) {
               <label>Type</label>
 
               <select value={f.type} onChange={set("type")}>
-                <option value="Expense">Kharcha (Expense)</option>
+                <option value="Expense">Expense</option>
 
                 <option value="Item">
-                  Samaan chahiye (jaise splicing machine cutter)
+                  Item Required (e.g. splicing machine cutter)
                 </option>
               </select>
             </div>
 
             {/* TITLE */}
             <div className="field-block">
-              <label>Kis cheez ke liye?</label>
-
+              <label>What is it for?</label>
               <input
                 value={f.title}
                 onChange={set("title")}
@@ -107,7 +106,7 @@ export default function Requests({ me }) {
               <label>
                 Amount (₹)
                 <span className="field-help">
-                  Approve hone ke baad yahi amount ledger me jayegi
+                  This amount will be added to the ledger after approval
                 </span>
               </label>
 
@@ -126,12 +125,12 @@ export default function Requests({ me }) {
 
             {/* REMARK */}
             <div className="field-block">
-              <label>Remark / karan</label>
+              <label>Remark / Reason</label>
 
               <textarea
                 value={f.remark}
                 onChange={set("remark")}
-                placeholder="Request ka reason likhiye..."
+                placeholder="Enter the reason for this request..."
               />
             </div>
 
@@ -142,7 +141,7 @@ export default function Requests({ me }) {
                 className="btn request-send-btn"
                 onClick={send}
               >
-                📤 Request bhejo
+                📤 Submit Request
               </button>
             </div>
           </div>
@@ -181,9 +180,8 @@ export default function Requests({ me }) {
                 <div className="request-empty">
                   <div className="request-empty-icon">✓</div>
 
-                  <strong>Kuch nahi</strong>
-
-                  <span>Is section mein abhi koi request nahi hai.</span>
+                  <strong>Nothing here</strong>
+                  <span>There are no requests in this section.</span>
                 </div>
               )}
             </div>

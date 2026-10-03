@@ -16,17 +16,17 @@ export default function Home({ me, sum, go }) {
   return (
     <>
       <div className="hero">
-        <h3>Namaste, {me.name} 👋</h3>
-        <p>Aaj ka poora hisaab aur kaam ek jagah.</p>
+        <h3>Namaskar, {me.name} 👋</h3>
+        <p>Manage today's accounts and tasks in one place.</p>
         <div className="quick">
           {P.canAddIncome && (
             <button onClick={() => go("ledger")}>➕ Income entry</button>
           )}
           {P.canRequest && (
-            <button onClick={() => go("req")}>💸 Nayi request</button>
+            <button onClick={() => go("req")}>💸 New Request</button>
           )}
           {P.canRaiseComplaint && (
-            <button onClick={() => go("cmp")}>🎫 Nayi complaint</button>
+            <button onClick={() => go("cmp")}>🎫 New Complaint</button>
           )}
         </div>
       </div>
@@ -42,13 +42,13 @@ export default function Home({ me, sum, go }) {
         )}
         {P.canApprove && (
           <div className="stat t-orange">
-            <span>Aapke approval pending</span>
+            <span>Pending Your Approval</span>
             <b>{sum.pendingForMe || 0}</b>
           </div>
         )}
         {P.canViewComplaints && (
           <div className="stat t-red">
-            <span>Open complaints</span>
+            <span>Open Complaints</span>
             <b>{sum.openComplaints || 0}</b>
           </div>
         )}
@@ -56,7 +56,7 @@ export default function Home({ me, sum, go }) {
 
       {pend.length > 0 && (
         <div className="card">
-          <h3>⏳ Aapke approval ke liye pending</h3>
+          <h3>⏳ Pending Your Approval</h3>
           {pend.map((r) => (
             <ReqCard key={r.id} r={r} P={P} />
           ))}
@@ -64,7 +64,7 @@ export default function Home({ me, sum, go }) {
       )}
       {em.length > 0 && (
         <div className="card">
-          <h3>🔴 Emergency complaints</h3>
+          <h3>🔴 Emergency Complaints</h3>
           {em.map((c) => (
             <CmpCard key={c.id} c={c} P={P} />
           ))}
@@ -73,7 +73,7 @@ export default function Home({ me, sum, go }) {
 
       {P.canViewActivity && (
         <div className="card">
-          <h3>🕘 Haal ki activity</h3>
+          <h3>🕘 Recent Activity</h3>
           <div className="tl">
             {recent.map((a) => (
               <div className="tl-item" key={a.id}>
@@ -89,11 +89,11 @@ export default function Home({ me, sum, go }) {
               </div>
             ))}
             {!recent.length && (
-              <span className="muted">Abhi koi activity nahi</span>
+              <span className="muted">No recent activity</span>
             )}
           </div>
           <button className="btn sm gray" onClick={() => go("activity")}>
-            Poora log dekho
+            View Full Activity Log
           </button>
         </div>
       )}

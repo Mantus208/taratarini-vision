@@ -96,8 +96,8 @@ export default function Auth({ onLogin }) {
           </h1>
 
           <p className="auth-brand-description">
-            Ledger, requests, complaints aur daily office activity ko ek hi
-            jagah manage karein.
+            Manage ledger, requests, complaints, and daily office activity in
+            one place.
           </p>
 
           <div className="auth-features">
@@ -183,13 +183,13 @@ export default function Auth({ onLogin }) {
 
               <div className="auth-links">
                 <button type="button" onClick={() => switchTo("forgot")}>
-                  Password bhul gaye?
+                  Forgot password?
                 </button>
 
                 <span>|</span>
 
                 <button type="button" onClick={() => switchTo("signup")}>
-                  Naya user signup
+                  Create a new account
                 </button>
               </div>
             </>
@@ -202,12 +202,12 @@ export default function Auth({ onLogin }) {
 
                 <h2>Create your account</h2>
 
-                <p>Signup ke baad admin approval required hoga.</p>
+                <p>Admin approval is required after signup.</p>
               </div>
 
               <div className="auth-fields">
                 <div className="auth-field">
-                  <label htmlFor="signup-name">Poora naam</label>
+                  <label htmlFor="signup-name">Full Name</label>
 
                   <div className="auth-input-wrap">
                     <span className="auth-input-icon">👤</span>
@@ -265,11 +265,13 @@ export default function Auth({ onLogin }) {
                       id="signup-answer"
                       value={f.s || ""}
                       onChange={set("s")}
-                      placeholder="Aapke pehle school ka naam"
+                      placeholder="Your first school's name"
                     />
                   </div>
 
-                  <small>Password bhulne par ye answer kaam aayega.</small>
+                  <small>
+                    This answer will be used if you forget your password.
+                  </small>
                 </div>
               </div>
 
@@ -280,7 +282,7 @@ export default function Auth({ onLogin }) {
 
               <div className="auth-back">
                 <button type="button" onClick={() => switchTo("login")}>
-                  ← Login par wapas
+                  ← Back to Login
                 </button>
               </div>
             </>
@@ -293,7 +295,7 @@ export default function Auth({ onLogin }) {
 
                 <h2>Reset your password</h2>
 
-                <p>Apne secret answer se password reset karein.</p>
+                <p>Reset your password using your secret answer.</p>
               </div>
 
               <div className="auth-fields">
@@ -324,13 +326,13 @@ export default function Auth({ onLogin }) {
                       id="forgot-answer"
                       value={f.s || ""}
                       onChange={set("s")}
-                      placeholder="Pehle school ka naam"
+                      placeholder="Your first school's name"
                     />
                   </div>
                 </div>
 
                 <div className="auth-field">
-                  <label htmlFor="forgot-password">Naya password</label>
+                  <label htmlFor="forgot-password">New Password</label>
 
                   <div className="auth-input-wrap">
                     <span className="auth-input-icon">🔒</span>
@@ -348,19 +350,19 @@ export default function Auth({ onLogin }) {
               </div>
 
               <button type="button" className="auth-submit" onClick={forgot}>
-                Password badlo
+                Change Password
                 <span>→</span>
               </button>
 
               <div className="auth-recovery-note">
-                💡 Answer yaad nahi?
+                💡 Don't remember your answer?
                 <br />
-                Admin se password reset karwao.
+                Ask the admin to reset your password.
               </div>
 
               <div className="auth-back">
                 <button type="button" onClick={() => switchTo("login")}>
-                  ← Login par wapas
+                  ← Back to Login
                 </button>
               </div>
             </>

@@ -33,10 +33,10 @@ export default function Ledger({ me }) {
       f.date &&
       f.date !== today() &&
       !confirm(
-        `Entry ki date ${f.date
+        `The entry date is ${f.date
           .split("-")
           .reverse()
-          .join("/")} hai (aaj ki date nahi hai). Sahi hai?`,
+          .join("/")} (not today's date). Is this correct?`,
       )
     ) {
       return;
@@ -77,8 +77,8 @@ export default function Ledger({ me }) {
             <div className="section-icon income-icon">➕</div>
 
             <div>
-              <h3>Paisa aaya</h3>
-              <p>Nayi income entry add karein</p>
+              <h3>Income Entry</h3>
+              <p>Add a new income entry</p>
             </div>
           </div>
 
@@ -117,7 +117,9 @@ export default function Ledger({ me }) {
           <div className="field-block">
             <label>
               Source
-              <span className="field-help">List se chuno ya naya likho</span>
+              <span className="field-help">
+                Select from the list or enter a new source
+              </span>
             </label>
 
             <input
@@ -163,13 +165,13 @@ export default function Ledger({ me }) {
         <>
           <div className="ledger-summary-grid">
             <div className="ledger-summary income">
-              <span>Aaya</span>
+              <span>Income</span>
               <strong>{inr(tin)}</strong>
               <small>Selected period</small>
             </div>
 
             <div className="ledger-summary expense">
-              <span>Gaya</span>
+              <span>Expense</span>
               <strong>{inr(tout)}</strong>
               <small>Selected period</small>
             </div>
@@ -191,7 +193,7 @@ export default function Ledger({ me }) {
 
                 <div>
                   <h3>Ledger</h3>
-                  <p>Income aur expense ka complete record</p>
+                  <p>Complete record of income and expenses</p>
                 </div>
               </div>
             </div>
@@ -199,7 +201,7 @@ export default function Ledger({ me }) {
             {/* DATE FILTER */}
             <div className="ledger-filter-box">
               <div className="field-block">
-                <label>Se</label>
+                <label>From</label>
 
                 <DateInput
                   value={flt.from}
@@ -213,7 +215,7 @@ export default function Ledger({ me }) {
               </div>
 
               <div className="field-block">
-                <label>Tak</label>
+                <label>To</label>
 
                 <DateInput
                   value={flt.to}
@@ -227,7 +229,7 @@ export default function Ledger({ me }) {
               </div>
 
               <div className="ledger-filter-info">
-                <span>Filtered entries</span>
+                <span>Filtered Entries</span>
                 <strong>{rows.length}</strong>
               </div>
             </div>
@@ -239,8 +241,8 @@ export default function Ledger({ me }) {
                   <tr>
                     <th>Date</th>
                     <th>Details</th>
-                    <th className="r">Aaya</th>
-                    <th className="r">Gaya</th>
+                    <th className="r">Income</th>
+                    <th className="r">Expense</th>
                     <th className="r">Balance</th>
                   </tr>
                 </thead>
@@ -290,9 +292,10 @@ export default function Ledger({ me }) {
                       <td colSpan="5" className="empty-ledger">
                         <div className="empty-ledger-box">
                           <div>📭</div>
-                          <strong>Koi entry nahi</strong>
+                          <strong>No entries found</strong>
                           <span>
-                            Selected date range mein koi ledger entry nahi mili.
+                            No ledger entries were found in the selected date
+                            range.
                           </span>
                         </div>
                       </td>

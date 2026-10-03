@@ -24,7 +24,7 @@ export default function Profile({ me }) {
     try {
       await enablePush();
 
-      toast("Is phone par notification chalu ho gaya");
+      toast("Notifications have been enabled on this device.");
     } catch (e) {
       toast(e.message, true);
     }
@@ -90,9 +90,8 @@ export default function Profile({ me }) {
           <div className="profile-section-icon permission-icon">🛡️</div>
 
           <div>
-            <h3>Meri permissions</h3>
-
-            <p>Aapke account ko diye gaye access</p>
+            <h3>My Permissions</h3>
+            <p>Access assigned to your account</p>
           </div>
         </div>
 
@@ -109,7 +108,7 @@ export default function Profile({ me }) {
         ) : (
           <div className="profile-no-permissions">
             <span>🔒</span>
-            Koi permission assign nahi hai.
+            No permissions assigned.
           </div>
         )}
       </div>
@@ -124,7 +123,7 @@ export default function Profile({ me }) {
           <div>
             <h3>Notifications</h3>
 
-            <p>Request aur complaint alerts is device par paaiye.</p>
+            <p>Receive request and complaint alerts on this device.</p>
           </div>
         </div>
 
@@ -135,7 +134,7 @@ export default function Profile({ me }) {
             <strong>Device notifications</strong>
 
             <span>
-              Har phone/browser par ek baar notifications enable karna hoga.
+              Notifications must be enabled once on each phone or browser.
             </span>
           </div>
         </div>
@@ -146,7 +145,7 @@ export default function Profile({ me }) {
             className="btn profile-primary-btn"
             onClick={push}
           >
-            🔔 Notification chalu karo
+            🔔 Enable Notifications
           </button>
 
           <button
@@ -154,7 +153,7 @@ export default function Profile({ me }) {
             className="btn gray profile-test-btn"
             onClick={test}
           >
-            🧪 Test bhejo
+            🧪 Send Test
           </button>
         </div>
       </div>
@@ -167,29 +166,28 @@ export default function Profile({ me }) {
           <div className="profile-section-icon password-icon">🔐</div>
 
           <div>
-            <h3>Password badlo</h3>
-
-            <p>Account security ke liye password update karein.</p>
+            <h3>Change Password</h3>
+            <p>Update your password to keep your account secure.</p>
           </div>
         </div>
 
         <div className="password-form">
           <div className="field-block">
-            <label htmlFor="old-password">Purana password</label>
+            <label htmlFor="old-password">Current Password</label>
 
             <input
               id="old-password"
               type="password"
               value={o}
               onChange={(e) => setO(e.target.value)}
-              placeholder="Purana password"
+              placeholder="Current Password"
               autoComplete="current-password"
             />
           </div>
 
           <div className="field-block">
             <label htmlFor="new-password">
-              Naya password
+              New Password
               <span className="field-help">Minimum 6 characters</span>
             </label>
 
@@ -198,7 +196,7 @@ export default function Profile({ me }) {
               type="password"
               value={n}
               onChange={(e) => setN(e.target.value)}
-              placeholder="Naya password"
+              placeholder="New Password"
               autoComplete="new-password"
             />
           </div>
@@ -209,7 +207,7 @@ export default function Profile({ me }) {
               className="btn profile-password-btn"
               onClick={chPass}
             >
-              🔐 Password badlo
+              🔐 Change Password
             </button>
           </div>
         </div>

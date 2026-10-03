@@ -47,9 +47,8 @@ export default function Complaints({ me }) {
             <div className="section-icon complaint-main-icon">🎫</div>
 
             <div>
-              <h3>Nayi Complaint</h3>
-
-              <p>Problem ko ticket ke form mein raise karein.</p>
+              <h3>New Complaint</h3>
+              <p>Raise your problem as a support ticket.</p>
             </div>
           </div>
 
@@ -70,23 +69,20 @@ export default function Complaints({ me }) {
 
               {/* SCOPE */}
               <div className="field-block">
-                <label>Kitna affect?</label>
+                <label>Impact</label>
 
                 <select value={f.scope} onChange={set("scope")}>
-                  <option value="Single">Ek customer</option>
-
-                  <option value="Area">Area (kai customer)</option>
-
-                  <option value="Village">Poora gaon off</option>
-
-                  <option value="Main">Main line</option>
+                  <option value="Single">Single Customer</option>
+                  <option value="Area">Area (Multiple Customers)</option>
+                  <option value="Village">Entire Village Offline</option>
+                  <option value="Main">Main Line</option>
                 </select>
               </div>
             </div>
 
             {/* LOCATION */}
             <div className="field-block">
-              <label>Location / Customer / Gaon ka naam</label>
+              <label>Location / Customer / Village Name</label>
 
               <input
                 value={f.location}
@@ -97,12 +93,12 @@ export default function Complaints({ me }) {
 
             {/* DESCRIPTION */}
             <div className="field-block">
-              <label>Problem ka detail</label>
+              <label>Problem Details</label>
 
               <textarea
                 value={f.description}
                 onChange={set("description")}
-                placeholder="Problem ko thoda detail mein likhiye..."
+                placeholder="Describe the problem in detail..."
               />
             </div>
 
@@ -113,7 +109,7 @@ export default function Complaints({ me }) {
                 className="btn complaint-send-btn"
                 onClick={send}
               >
-                🎫 Ticket banao
+                🎫 Create Ticket
               </button>
             </div>
           </div>
@@ -131,7 +127,7 @@ export default function Complaints({ me }) {
             <div>
               <h3>Open Complaints</h3>
 
-              <span>Priority ke hisaab se</span>
+              <span>Sorted by priority</span>
             </div>
           </div>
 
@@ -147,9 +143,8 @@ export default function Complaints({ me }) {
             <div className="complaint-empty">
               <div className="complaint-empty-icon success-empty">✓</div>
 
-              <strong>Koi open complaint nahi</strong>
-
-              <span>Sabhi complaints currently clear hain 🎉</span>
+              <strong>No open complaints</strong>
+              <span>All complaints are currently clear 🎉</span>
             </div>
           )}
         </div>
@@ -182,9 +177,8 @@ export default function Complaints({ me }) {
             <div className="complaint-empty">
               <div className="complaint-empty-icon">📭</div>
 
-              <strong>Kuch nahi</strong>
-
-              <span>Abhi koi resolved complaint nahi hai.</span>
+              <strong>Nothing here</strong>
+              <span>There are no resolved complaints yet.</span>
             </div>
           )}
         </div>

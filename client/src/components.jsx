@@ -58,7 +58,7 @@ export function DateInput({ value, onChange }) {
       />
       <button
         type="button"
-        title="Calendar se chuno"
+        title="Select from calendar"
         onClick={() =>
           pick.current && pick.current.showPicker && pick.current.showPicker()
         }
@@ -103,7 +103,7 @@ export function ReqCard({ r, P }) {
   const buy = () => {
     if (
       !confirm(
-        `${inr(r.amount)} ka payment mark karein? Amount badli nahi ja sakti.`,
+        `Mark payment of ${inr(r.amount)}? The amount cannot be changed.`,
       )
     )
       return;
@@ -119,8 +119,8 @@ export function ReqCard({ r, P }) {
       <span className={"chip " + r.status}>{r.status}</span>
       <br />
       <span className="muted">
-        {r.type === "Item" ? "Samaan/Zarurat" : "Expense"} · {inr(r.amount)} ·{" "}
-        {nm(r.requestedBy)} · {fday(r.date)}
+        {r.type === "Item" ? "Item / Requirement" : "Expense"} · {inr(r.amount)}{" "}
+        · {nm(r.requestedBy)} · {fday(r.date)}
       </span>
       {r.remark && (
         <>
@@ -130,18 +130,18 @@ export function ReqCard({ r, P }) {
       )}
       <br />
       <span className="muted">
-        Approval: {r.yes}/{r.need} chahiye ({r.n} partner) ·{" "}
+        Approval: {r.yes}/{r.need} required ({r.n} partners) ·{" "}
         {r.voters.length
           ? r.voters
               .map((x) => nm(x.user) + (x.vote === "Y" ? " ✔" : " ✘"))
               .join(", ")
-          : "abhi kisi ne vote nahi kiya"}
+          : "No one has voted yet"}
       </span>
       {r.status === "Purchased" && (
         <>
           <br />
           <span className="muted">
-            Kharida: {nm(r.purchasedBy)} · {fday(r.purchaseDate)} ·{" "}
+            Purchased by: {nm(r.purchasedBy)} · {fday(r.purchaseDate)} ·{" "}
             <b>{inr(r.actualAmount)}</b> {r.purchaseNote}
           </span>
         </>
@@ -150,16 +150,16 @@ export function ReqCard({ r, P }) {
         {r.canVote && (
           <>
             <button className="btn sm" onClick={() => vote("Y")}>
-              ✔ Accept {r.myVote === "Y" ? "(aapka vote)" : ""}
+              ✔ Accept {r.myVote === "Y" ? "(your vote)" : ""}
             </button>
             <button className="btn sm red" onClick={() => vote("N")}>
-              ✘ Reject {r.myVote === "N" ? "(aapka vote)" : ""}
+              ✘ Reject {r.myVote === "N" ? "(your vote)" : ""}
             </button>
           </>
         )}
         {r.status === "Approved" && P.canPurchase && (
           <button className="btn sm gray" onClick={buy}>
-            🛒 Kharid liya / Payment kiya ({inr(r.amount)})
+            🛒 Purchased / Payment Made ({inr(r.amount)})
           </button>
         )}
       </div>
@@ -169,15 +169,15 @@ export function ReqCard({ r, P }) {
 
 // ---------- complaint card ----------
 const SCOPE = {
-  Single: "Ek customer",
-  Area: "Area (kai customer)",
-  Village: "Poora gaon off",
-  Main: "Main line",
+  Single: "Single Customer",
+  Area: "Area (Multiple Customers)",
+  Village: "Entire Village Offline",
+  Main: "Main Line",
 };
 
 export function CmpCard({ c, P }) {
   const resolve = () => {
-    const n = prompt("Kya kaam kiya? (resolution note)", "");
+    const n = prompt("What work was done? (resolution note)", "");
     if (n === null) return;
     act(`/complaints/${c.id}/resolve`, "POST", { note: n });
   };
@@ -194,7 +194,7 @@ export function CmpCard({ c, P }) {
       <br />
       <span className="muted">
         Raise: {nm(c.raisedBy)} · {fdt(c.raised)}
-        {c.status === "Open" ? ` · ${c.hours} ghante se open` : ""}
+        {c.status === "Open" ? ` · ${c.hours} hours since open` : ""}
       </span>
       {c.status === "Resolved" && (
         <>
@@ -208,7 +208,7 @@ export function CmpCard({ c, P }) {
         <>
           <br />
           <button className="btn sm" onClick={resolve}>
-            ✔ Resolve karo
+            ✔ Resolve
           </button>
         </>
       )}
