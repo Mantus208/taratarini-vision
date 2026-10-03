@@ -1,51 +1,77 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function InstallApp() {
-  const [prompt, setPrompt] = useState(null);
+  const deferredPrompt = useRef(null);
 
-  const [installed, setInstalled] = useState(
-    () =>
-      window.matchMedia("(display-mode: standalone)").matches ||
-      window.navigator.standalone === true,
-  );
+  const isStandalone =
+    window.matchMedia("(display-mode: standalone)").matches ||
+    window.navigator.standalone === true;
+
+  const [canInstall, setCanInstall] = useState(false);
+  const [installing, setInstalling] = useState(false);
 
   useEffect(() => {
-    const handler = (e) => {
+    const beforeInstallHandler = (e) => {
+      console.log("PWA: beforeinstallprompt fired");
+
       e.preventDefault();
-      setPrompt(e);
+
+      deferredPrompt.current = e;
+      setCanInstall(true);
     };
 
     const installedHandler = () => {
-      setInstalled(true);
-      setPrompt(null);
+      console.log("PWA: app installed");
+
+      deferredPrompt.current = null;
+      setCanInstall(false);
+      setInstalling(false);
     };
 
-    window.addEventListener("beforeinstallprompt", handler);
+    window.addEventListener("beforeinstallprompt", beforeInstallHandler);
 
     window.addEventListener("appinstalled", installedHandler);
 
     return () => {
-      window.removeEventListener("beforeinstallprompt", handler);
+      window.removeEventListener("beforeinstallprompt", beforeInstallHandler);
 
       window.removeEventListener("appinstalled", installedHandler);
     };
   }, []);
 
   const install = async () => {
-    if (!prompt) return;
+    const promptEvent = deferredPrompt.current;
 
-    prompt.prompt();
-
-    try {
-      await prompt.userChoice;
-    } catch {
-      // User dismissed the install prompt.
+    if (!promptEvent) {
+      console.log("PWA: install prompt not available");
+      return;
     }
 
-    setPrompt(null);
+    try {
+      setInstalling(true);
+
+      await promptEvent.prompt();
+
+      const result = await promptEvent.userChoice;
+
+      console.log("PWA install result:", result.outcome);
+
+      deferredPrompt.current = null;
+      setCanInstall(false);
+    } catch (error) {
+      console.error("PWA install error:", error);
+    } finally {
+      setInstalling(false);
+    }
   };
 
-  if (installed || !prompt) {
+  // Already running as installed PWA
+  if (isStandalone) {
+    return null;
+  }
+
+  // Browser has not provided install prompt
+  if (!canInstall) {
     return null;
   }
 
@@ -54,10 +80,12 @@ export default function InstallApp() {
       type="button"
       className="install-app-btn"
       onClick={install}
+      disabled={installing}
       aria-label="Install Taratarini Vision app"
     >
       <span className="install-app-icon">📲</span>
-      <span>Install App</span>
+
+      <span>{installing ? "Installing..." : "Install App"}</span>
     </button>
   );
 }
