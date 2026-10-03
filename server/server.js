@@ -9,7 +9,16 @@ const rateLimit = require("express-rate-limit");
 const app = express();
 app.set("trust proxy", 1);
 app.use(helmet({ contentSecurityPolicy: false }));
+
+// JSON body padhna zaroori hai (photo evidence ke liye limit 2mb)
+app.use(express.json({ limit: "2mb" }));
 app.use(express.urlencoded({ extended: true, limit: "2mb" }));
+
+// body na aaye to req.body undefined na rahe, taaki route crash na kare
+app.use((req, res, next) => {
+  if (req.body === undefined) req.body = {};
+  next();
+});
 
 const limiter = (max) =>
   rateLimit({

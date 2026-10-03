@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { act } from "./api";
+import { act, api, toast, refresh } from "./api";
 import { nm, inr, fday, fdt } from "./utils";
 
 // ---------- dd/mm/yyyy date input ----------
@@ -291,26 +291,27 @@ export function CmpCard({ c, P }) {
 
       const gps = await getGps();
 
-      const result = await act(
+      // api() seedha server ka jawab deta hai (act() sirf true/false deta hai)
+      const data = await api(
         `/complaints/${c.id}/field-visit/start`,
         "POST",
         gps,
       );
 
-      if (result) {
-        const token = result.fieldVisit?.visitToken;
+      const token = data.fieldVisit?.visitToken;
 
-        if (!token) {
-          alert("Field visit token was not received from the server.");
-          return;
-        }
-
-        localStorage.setItem(`tv_visit_${c.id}`, token);
-
-        setVisitStarted(true);
+      if (!token) {
+        alert("Field visit token was not received from the server.");
+        return;
       }
+
+      localStorage.setItem(`tv_visit_${c.id}`, token);
+
+      setVisitStarted(true);
+      toast(data.message || "Field visit started");
+      refresh();
     } catch (e) {
-      alert(e.message);
+      if (e.message !== "SESSION_EXPIRED") alert(e.message);
     } finally {
       setBusy(false);
     }
@@ -352,23 +353,23 @@ export function CmpCard({ c, P }) {
       return;
     }
 
-    let visitToken = localStorage.getItem(`tv_visit_${c.id}`);
+    try {
+      setBusy(true);
 
-    if (!visitToken) {
-      try {
-        const gpsForResume = await getGps();
+      // ek hi baar location lo, resume aur resolve dono me wahi use hogi
+      const gps = await getGps();
 
-        const resumeResult = await act(
+      let visitToken = localStorage.getItem(`tv_visit_${c.id}`);
+
+      // visit kisi aur device par start hua ho to is device par resume karo
+      if (!visitToken) {
+        const resumed = await api(
           `/complaints/${c.id}/field-visit/resume`,
           "POST",
-          gpsForResume,
+          gps,
         );
 
-        if (!resumeResult) {
-          return;
-        }
-
-        visitToken = resumeResult.fieldVisit?.visitToken || "";
+        visitToken = resumed.fieldVisit?.visitToken || "";
 
         if (!visitToken) {
           alert("Unable to resume the field visit.");
@@ -376,33 +377,21 @@ export function CmpCard({ c, P }) {
         }
 
         localStorage.setItem(`tv_visit_${c.id}`, visitToken);
-      } catch (e) {
-        alert(e.message);
-        return;
       }
-    }
 
-    try {
-      setBusy(true);
-
-      const gps = await getGps();
-
-      const payload = {
+      const data = await api(`/complaints/${c.id}/resolve`, "POST", {
         ...gps,
         note: note.trim(),
         photoData: photo,
         visitToken,
-      };
+      });
 
-      const result = await act(`/complaints/${c.id}/resolve`, "POST", payload);
+      localStorage.removeItem(`tv_visit_${c.id}`);
 
-      if (result) {
-        localStorage.removeItem(`tv_visit_${c.id}`);
-
-        window.location.reload();
-      }
+      toast(data.message || "Complaint resolved");
+      refresh();
     } catch (e) {
-      alert(e.message);
+      if (e.message !== "SESSION_EXPIRED") alert(e.message);
     } finally {
       setBusy(false);
     }
