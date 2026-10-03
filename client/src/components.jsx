@@ -283,6 +283,18 @@ export function CmpCard({ c, P }) {
   );
   const [photo, setPhoto] = useState(c.fieldVisit?.hasPhoto ? "saved" : "");
   const [note, setNote] = useState("");
+  const openMap = (lat, lng) => {
+    if (!Number.isFinite(Number(lat)) || !Number.isFinite(Number(lng))) {
+      alert("Location coordinates are not available.");
+      return;
+    }
+
+    window.open(
+      `https://www.google.com/maps?q=${lat},${lng}`,
+      "_blank",
+      "noopener,noreferrer",
+    );
+  };
   const viewEvidence = async () => {
     try {
       setLoadingEvidence(true);
@@ -565,6 +577,62 @@ export function CmpCard({ c, P }) {
             Close
           </button>
         </div>
+      )}
+      {c.status === "Resolved" && (
+        <>
+          <br />
+
+          <span className="muted">
+            Resolved: {nm(c.resolvedBy)} · {fdt(c.resolved)} · {c.note}
+          </span>
+
+          {c.fieldVisit?.startLocation?.lat != null &&
+            c.fieldVisit?.startLocation?.lng != null && (
+              <>
+                <br />
+
+                <button
+                  type="button"
+                  className="btn sm gray"
+                  onClick={() =>
+                    openMap(
+                      c.fieldVisit.startLocation.lat,
+                      c.fieldVisit.startLocation.lng,
+                    )
+                  }
+                >
+                  📍 View Visit Start Location
+                </button>
+              </>
+            )}
+
+          {c.fieldVisit?.completeLocation?.lat != null &&
+            c.fieldVisit?.completeLocation?.lng != null && (
+              <button
+                type="button"
+                className="btn sm gray"
+                onClick={() =>
+                  openMap(
+                    c.fieldVisit.completeLocation.lat,
+                    c.fieldVisit.completeLocation.lng,
+                  )
+                }
+              >
+                📍 View Completion Location
+              </button>
+            )}
+
+          {c.fieldVisit?.hasPhoto && (
+            <button
+              type="button"
+              className="btn sm gray"
+              onClick={viewEvidence}
+              disabled={loadingEvidence}
+            >
+              📷 {loadingEvidence ? "Loading..." : "View Evidence"}
+            </button>
+          )}
+        </>
       )}
     </div>
   );

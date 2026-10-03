@@ -442,10 +442,29 @@ router.get(
           hours: p.hours,
           fieldVisit: {
             status: c.fieldVisit?.status || "NotStarted",
+
             startedBy: c.fieldVisit?.startedBy || "",
             startedAt: c.fieldVisit?.startedAt || null,
+
+            startLocation: c.fieldVisit?.startLocation
+              ? {
+                  lat: c.fieldVisit.startLocation.lat,
+                  lng: c.fieldVisit.startLocation.lng,
+                  accuracy: c.fieldVisit.startLocation.accuracy,
+                }
+              : null,
+
             completedBy: c.fieldVisit?.completedBy || "",
             completedAt: c.fieldVisit?.completedAt || null,
+
+            completeLocation: c.fieldVisit?.completeLocation
+              ? {
+                  lat: c.fieldVisit.completeLocation.lat,
+                  lng: c.fieldVisit.completeLocation.lng,
+                  accuracy: c.fieldVisit.completeLocation.accuracy,
+                }
+              : null,
+
             hasPhoto: Boolean(c.fieldVisit?.photoData),
           },
         };
