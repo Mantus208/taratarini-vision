@@ -564,6 +564,83 @@ router.post(
     });
   }),
 );
+
+router.post(
+  "/complaints/:code/field-visit/resume",
+  need("canResolve", "You do not have permission to resume a field visit."),
+  h(async (req, res) => {
+    const c = await Complaint.findOne({
+      code: req.params.code,
+    });
+
+    if (!c) {
+      throw fail("Complaint not found.", 404);
+    }
+
+    if (c.status !== "Open") {
+      throw fail("This complaint is already resolved.");
+    }
+
+    if (c.fieldVisit?.status !== "Active") {
+      throw fail("No active field visit found.");
+    }
+
+    if (
+      c.fieldVisit.startedBy &&
+      c.fieldVisit.startedBy !== req.user.username
+    ) {
+      throw fail("This field visit was started by another staff member.");
+    }
+
+    const lat = Number(req.body.lat);
+    const lng = Number(req.body.lng);
+    const accuracy = Number(req.body.accuracy);
+
+    if (!validGps(lat, lng)) {
+      throw fail("A valid GPS location is required.");
+    }
+
+    if (Number.isFinite(accuracy) && accuracy > MAX_GPS_ACCURACY_METERS) {
+      throw fail("GPS accuracy is too low. Please try again from the field.");
+    }
+
+    /*
+     * For an already-active visit, verify that the
+     * current device is still near the location where
+     * the field visit was started.
+     */
+    const startedLat = Number(c.fieldVisit.startLocation?.lat);
+
+    const startedLng = Number(c.fieldVisit.startLocation?.lng);
+
+    if (Number.isFinite(startedLat) && Number.isFinite(startedLng)) {
+      const distance = distanceMeters(startedLat, startedLng, lat, lng);
+
+      if (distance > FIELD_RADIUS_METERS) {
+        throw fail(
+          `You are too far from the field visit start location. Current distance: ${Math.round(
+            distance,
+          )} meters.`,
+        );
+      }
+    }
+
+    const visitToken = crypto.randomUUID();
+
+    c.fieldVisit.visitToken = visitToken;
+
+    await c.save();
+
+    res.json({
+      message: "Field visit resumed successfully.",
+      fieldVisit: {
+        status: "Active",
+        visitToken,
+        startedAt: c.fieldVisit.startedAt,
+      },
+    });
+  }),
+);
 router.post(
   "/complaints/:code/resolve",
   need("canResolve", "You do not have permission to resolve complaints."),

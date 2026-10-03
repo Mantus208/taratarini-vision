@@ -298,7 +298,14 @@ export function CmpCard({ c, P }) {
       );
 
       if (result) {
-        localStorage.setItem(`tv_visit_${c.id}`, result.fieldVisit.visitToken);
+        const token = result.fieldVisit?.visitToken;
+
+        if (!token) {
+          alert("Field visit token was not received from the server.");
+          return;
+        }
+
+        localStorage.setItem(`tv_visit_${c.id}`, token);
 
         setVisitStarted(true);
       }
@@ -345,11 +352,34 @@ export function CmpCard({ c, P }) {
       return;
     }
 
-    const visitToken = localStorage.getItem(`tv_visit_${c.id}`);
+    let visitToken = localStorage.getItem(`tv_visit_${c.id}`);
 
     if (!visitToken) {
-      alert("This field visit was not started on this device.");
-      return;
+      try {
+        const gpsForResume = await getGps();
+
+        const resumeResult = await act(
+          `/complaints/${c.id}/field-visit/resume`,
+          "POST",
+          gpsForResume,
+        );
+
+        if (!resumeResult) {
+          return;
+        }
+
+        visitToken = resumeResult.fieldVisit?.visitToken || "";
+
+        if (!visitToken) {
+          alert("Unable to resume the field visit.");
+          return;
+        }
+
+        localStorage.setItem(`tv_visit_${c.id}`, visitToken);
+      } catch (e) {
+        alert(e.message);
+        return;
+      }
     }
 
     try {
