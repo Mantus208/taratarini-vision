@@ -9,13 +9,15 @@ const rateLimit = require("express-rate-limit");
 const app = express();
 app.set("trust proxy", 1);
 app.use(helmet({ contentSecurityPolicy: false }));
-app.use(express.json({ limit: "100kb" }));
+app.use(express.urlencoded({ extended: true, limit: "2mb" }));
 
 const limiter = (max) =>
   rateLimit({
     windowMs: 15 * 60 * 1000,
     max,
-    message: { error: "Bahut zyada koshish ho gayi, 15 minute baad try karo" },
+    message: {
+      error: "Too many attempts. Please try again after 15 minutes.",
+    },
   });
 app.use("/api/auth/login", limiter(20));
 app.use("/api/auth/forgot", limiter(10));

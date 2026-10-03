@@ -226,7 +226,7 @@ function compressImage(file) {
       const img = new Image();
 
       img.onload = () => {
-        const MAX_SIZE = 1280;
+        const MAX_SIZE = 1000;
 
         let width = img.width;
         let height = img.height;
@@ -253,7 +253,7 @@ function compressImage(file) {
 
         ctx.drawImage(img, 0, 0, width, height);
 
-        const data = canvas.toDataURL("image/jpeg", 0.72);
+        const data = canvas.toDataURL("image/jpeg", 0.6);
 
         resolve(data);
       };
