@@ -275,14 +275,37 @@ function compressImage(file) {
 
 export function CmpCard({ c, P }) {
   const fileRef = useRef(null);
-
+  const [evidence, setEvidence] = useState("");
+  const [loadingEvidence, setLoadingEvidence] = useState(false);
   const [busy, setBusy] = useState(false);
   const [visitStarted, setVisitStarted] = useState(
     c.fieldVisit?.status === "Active",
   );
   const [photo, setPhoto] = useState(c.fieldVisit?.hasPhoto ? "saved" : "");
   const [note, setNote] = useState("");
+  const viewEvidence = async () => {
+    try {
+      setLoadingEvidence(true);
 
+      const res = await fetch(`/api/complaints/${c.id}/evidence`, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("ao_tk"),
+        },
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Unable to load evidence.");
+      }
+
+      setEvidence(data.photo);
+    } catch (e) {
+      alert(e.message);
+    } finally {
+      setLoadingEvidence(false);
+    }
+  };
   const startVisit = async () => {
     if (busy) return;
 
@@ -415,9 +438,25 @@ export function CmpCard({ c, P }) {
       {c.status === "Resolved" && (
         <>
           <br />
+
           <span className="muted">
             Resolved: {nm(c.resolvedBy)} · {fdt(c.resolved)} · {c.note}
           </span>
+
+          {c.fieldVisit?.hasPhoto && (
+            <>
+              <br />
+
+              <button
+                type="button"
+                className="btn sm gray"
+                onClick={viewEvidence}
+                disabled={loadingEvidence}
+              >
+                📷 {loadingEvidence ? "Loading..." : "View Evidence"}
+              </button>
+            </>
+          )}
         </>
       )}
       {c.status === "Open" && P.canResolve && (
@@ -493,6 +532,38 @@ export function CmpCard({ c, P }) {
               </button>
             </>
           )}
+        </div>
+      )}
+      {evidence && (
+        <div
+          style={{
+            marginTop: 12,
+            padding: 10,
+            borderRadius: 12,
+            background: "#f8fafc",
+            border: "1px solid var(--line)",
+          }}
+        >
+          <img
+            src={evidence}
+            alt={`Evidence for ${c.id}`}
+            style={{
+              display: "block",
+              width: "100%",
+              maxHeight: 420,
+              objectFit: "contain",
+              borderRadius: 10,
+            }}
+          />
+
+          <button
+            type="button"
+            className="btn sm gray"
+            onClick={() => setEvidence("")}
+            style={{ marginTop: 8 }}
+          >
+            Close
+          </button>
         </div>
       )}
     </div>

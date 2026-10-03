@@ -791,7 +791,35 @@ router.post(
     });
   }),
 );
+router.get(
+  "/complaints/:code/evidence",
+  h(async (req, res) => {
+    const P = perms(req.user);
 
+    const c = await Complaint.findOne({
+      code: req.params.code,
+    });
+
+    if (!c) {
+      throw fail("Complaint not found.", 404);
+    }
+
+    if (!P.canViewComplaints && c.raisedBy !== req.user.username) {
+      throw fail("You do not have permission to view this evidence.", 403);
+    }
+
+    const photo = c.fieldVisit?.photoData || "";
+
+    if (!photo) {
+      throw fail("No photo evidence is available.");
+    }
+
+    res.json({
+      code: c.code,
+      photo,
+    });
+  }),
+);
 // ---------- activity log ----------
 router.get(
   "/activity",
