@@ -499,9 +499,11 @@ router.post(
       throw fail("This complaint is already resolved.");
     }
 
-    const lat = Number(req.body.lat);
-    const lng = Number(req.body.lng);
-    const accuracy = Number(req.body.accuracy);
+    const body = req.body || {};
+
+    const lat = Number(body.lat);
+    const lng = Number(body.lng);
+    const accuracy = Number(body.accuracy);
 
     if (!validGps(lat, lng)) {
       throw fail("A valid GPS location is required.");
