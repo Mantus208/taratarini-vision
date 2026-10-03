@@ -49,10 +49,11 @@ app.use((req, res, next) => {
 
 // error handler
 app.use((err, req, res, next) => {
-  if (!err.status) console.error(err);
-  res
-    .status(err.status || 500)
-    .json({ error: err.status ? err.message : "Server me kuch gadbad hui" });
+  console.error("SERVER ERROR:", err);
+
+  res.status(err.status || 500).json({
+    error: err.message || "Internal server error",
+  });
 });
 
 mongoose

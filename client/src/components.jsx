@@ -308,23 +308,22 @@ export function CmpCard({ c, P }) {
   };
 
   const choosePhoto = async (e) => {
-    const file = e.target.files?.[0];
+  const file = e.target.files?.[0];
 
-    if (!file) return;
+  if (!file) return;
 
-    try {
-      setBusy(true);
+  try {
+    setBusy(true);
 
-      const compressed = await compressImage(file);
+    const compressed = await compressImage(file);
 
-      setPhoto(compressed);
-    } catch (e) {
-      alert(e.message);
-    } finally {
-      setBusy(false);
-      e.target.value = "";
-    }
-  };
+    setPhoto(compressed);
+  } catch (e) {
+    alert(e.message);
+  } finally {
+    setBusy(false);
+  }
+};
 
   const resolve = async () => {
     if (busy) return;
