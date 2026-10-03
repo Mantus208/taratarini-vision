@@ -47,6 +47,10 @@ const validGps = (lat, lng) =>
   lng >= -180 &&
   lng <= 180;
 
+// Number(null) ka jawab 0 aata hai, isliye null/undefined/khali ko alag se pakdo
+const hasCoord = (v) =>
+  v !== null && v !== undefined && v !== "" && Number.isFinite(Number(v));
+
 function distanceMeters(lat1, lng1, lat2, lng2) {
   const R = 6371000;
 
@@ -65,10 +69,17 @@ function distanceMeters(lat1, lng1, lat2, lng2) {
 }
 
 function verifyFieldLocation(c, lat, lng) {
-  const siteLat = Number(c.siteLocation?.lat);
-  const siteLng = Number(c.siteLocation?.lng);
+  const rawLat = c.siteLocation?.lat;
+  const rawLng = c.siteLocation?.lng;
 
-  if (!Number.isFinite(siteLat) || !Number.isFinite(siteLng)) {
+  const siteLat = Number(rawLat);
+  const siteLng = Number(rawLng);
+
+  // site location set nahi hai (null) ya (0, 0) hai to site "unknown" maano
+  const unknownSite =
+    !hasCoord(rawLat) || !hasCoord(rawLng) || (siteLat === 0 && siteLng === 0);
+
+  if (unknownSite) {
     return {
       verified: true,
       distance: null,
@@ -611,12 +622,16 @@ router.post(
      * current device is still near the location where
      * the field visit was started.
      */
-    const startedLat = Number(c.fieldVisit.startLocation?.lat);
+    const rawStartLat = c.fieldVisit.startLocation?.lat;
+    const rawStartLng = c.fieldVisit.startLocation?.lng;
 
-    const startedLng = Number(c.fieldVisit.startLocation?.lng);
-
-    if (Number.isFinite(startedLat) && Number.isFinite(startedLng)) {
-      const distance = distanceMeters(startedLat, startedLng, lat, lng);
+    if (hasCoord(rawStartLat) && hasCoord(rawStartLng)) {
+      const distance = distanceMeters(
+        Number(rawStartLat),
+        Number(rawStartLng),
+        lat,
+        lng,
+      );
 
       if (distance > FIELD_RADIUS_METERS) {
         throw fail(
@@ -759,7 +774,9 @@ router.post(
       "resolve",
       req.user.username,
       `Ticket ${c.code} (${c.location}) resolved` +
-        ` · Field visit verified` +
+        (check.knownSite
+          ? ` · Field visit verified (${Math.round(check.distance)} m from site)`
+          : ` · Field visit completed with GPS and photo (site location not set)`) +
         (note ? ` · ${note}` : ""),
     );
 
