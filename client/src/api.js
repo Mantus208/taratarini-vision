@@ -45,11 +45,16 @@ export async function api(path, method = "GET", body) {
 export async function act(path, method, body) {
   try {
     const d = await api(path, method, body);
-    toast(d.message || "Ho gaya");
+
+    toast(d.message || "Done");
     refresh();
-    return true;
+
+    return d;
   } catch (e) {
-    if (e.message !== "SESSION_EXPIRED") toast(e.message, true);
+    if (e.message !== "SESSION_EXPIRED") {
+      toast(e.message, true);
+    }
+
     return false;
   }
 }

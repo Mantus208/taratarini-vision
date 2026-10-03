@@ -345,9 +345,16 @@ export function CmpCard({ c, P }) {
       return;
     }
 
+    const visitToken = localStorage.getItem(`tv_visit_${c.id}`);
+
+    if (!visitToken) {
+      alert("This field visit was not started on this device.");
+      return;
+    }
+
     try {
       setBusy(true);
-      const visitToken = localStorage.getItem(`tv_visit_${c.id}`);
+
       const gps = await getGps();
 
       const payload = {
@@ -357,18 +364,11 @@ export function CmpCard({ c, P }) {
         visitToken,
       };
 
-      /*
-       * If photo is already saved from a previous local state,
-       * frontend should still force a fresh photo for final resolve.
-       */
-      if (!payload.photoData) {
-        alert("Please add a new photo before resolving.");
-        return;
-      }
+      const result = await act(`/complaints/${c.id}/resolve`, "POST", payload);
 
-      const ok = await act(`/complaints/${c.id}/resolve`, "POST", payload);
+      if (result) {
+        localStorage.removeItem(`tv_visit_${c.id}`);
 
-      if (ok) {
         window.location.reload();
       }
     } catch (e) {
