@@ -1,5 +1,7 @@
 /* Ledger page */
-.ledger-entry-card { padding: 23px; }
+.ledger-entry-card {
+  padding: 23px;
+}
 
 .section-head {
   display: flex;
@@ -28,13 +30,23 @@
   font-size: 18px;
 }
 
-.income-icon { color: #4338ca; background: linear-gradient(135deg, #eef2ff, #f5f3ff); }
-.ledger-icon { color: #db2777; background: linear-gradient(135deg, #fdf2f8, #fce7f3); }
+.income-icon {
+  color: #4338ca;
+  background: linear-gradient(135deg, #eef2ff, #f5f3ff);
+}
+.ledger-icon {
+  color: #db2777;
+  background: linear-gradient(135deg, #fdf2f8, #fce7f3);
+}
 
 .ledger-entry-card > .section-head,
-.ledger-title-row { margin-bottom: 20px; }
+.ledger-title-row {
+  margin-bottom: 20px;
+}
 
-.ledger-main-fields { margin-bottom: 2px; }
+.ledger-main-fields {
+  margin-bottom: 2px;
+}
 
 .form-actions .ledger-save-btn {
   min-width: 150px;
@@ -61,21 +73,54 @@
   border-radius: 17px;
   background: #fff;
   box-shadow: var(--shadow-sm);
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
 }
 
-.ledger-summary:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
-.ledger-summary.income { border-top-color: #06b6d4; }
-.ledger-summary.expense { border-top-color: #ec4899; }
-.ledger-summary.balance { border-top-color: #6366f1; }
-.ledger-summary span { color: var(--muted); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
-.ledger-summary strong { margin-top: 4px; font-size: 25px; letter-spacing: -0.035em; }
-.ledger-summary.income strong { color: #0891b2; }
-.ledger-summary.expense strong { color: #db2777; }
-.ledger-summary.balance strong { color: #4f46e5; }
-.ledger-summary small { margin-top: 3px; color: #94a3b8; font-size: 10px; }
+.ledger-summary:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
+}
+.ledger-summary.income {
+  border-top-color: #06b6d4;
+}
+.ledger-summary.expense {
+  border-top-color: #ec4899;
+}
+.ledger-summary.balance {
+  border-top-color: #6366f1;
+}
+.ledger-summary span {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.ledger-summary strong {
+  margin-top: 4px;
+  font-size: 25px;
+  letter-spacing: -0.035em;
+}
+.ledger-summary.income strong {
+  color: #0891b2;
+}
+.ledger-summary.expense strong {
+  color: #db2777;
+}
+.ledger-summary.balance strong {
+  color: #4f46e5;
+}
+.ledger-summary small {
+  margin-top: 3px;
+  color: #94a3b8;
+  font-size: 10px;
+}
 
-.ledger-card { padding: 23px; }
+.ledger-card {
+  padding: 23px;
+}
 
 .ledger-filter-box {
   display: grid;
@@ -84,12 +129,18 @@
   align-items: end;
   margin-bottom: 18px;
   padding: 14px;
-  border: 1px solid rgba(99,102,241,0.08);
+  border: 1px solid rgba(99, 102, 241, 0.08);
   border-radius: 15px;
-  background: linear-gradient(135deg, rgba(99,102,241,0.045), rgba(236,72,153,0.025));
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.045),
+    rgba(236, 72, 153, 0.025)
+  );
 }
 
-.ledger-filter-box .field-block { margin: 0; }
+.ledger-filter-box .field-block {
+  margin: 0;
+}
 
 .ledger-filter-info {
   min-height: 43px;
@@ -99,21 +150,419 @@
   justify-content: space-between;
   border: 1px solid var(--line);
   border-radius: 10px;
-  background: rgba(255,255,255,0.75);
+  background: rgba(255, 255, 255, 0.75);
 }
 
-.ledger-filter-info span { color: var(--muted); font-size: 10px; font-weight: 700; }
-.ledger-filter-info strong { color: #4f46e5; font-size: 18px; }
-.ledger-table table { min-width: 760px; }
-.ledger-date { display: inline-flex; padding: 5px 8px; border-radius: 8px; background: #f8fafc; color: #475569; font-size: 11px; font-weight: 700; }
-.ledger-detail { display: flex; flex-direction: column; gap: 2px; }
-.ledger-detail b { color: var(--text); font-size: 13px; }
-.ledger-detail span { color: var(--muted); font-size: 10px; }
-.amount-in { display: inline-flex; padding: 5px 8px; border-radius: 8px; color: #0369a1; background: #ecfeff; font-size: 12px; font-weight: 800; }
-.amount-out { display: inline-flex; padding: 5px 8px; border-radius: 8px; color: #be185d; background: #fdf2f8; font-size: 12px; font-weight: 800; }
-.balance-value { color: #334155; font-size: 12px; font-weight: 700; }
-.empty-ledger { padding: 35px 15px !important; text-align: center !important; }
-.empty-ledger-box { display: flex; flex-direction: column; align-items: center; gap: 5px; }
-.empty-ledger-box > div { width: 50px; height: 50px; display: grid; place-items: center; margin-bottom: 5px; border-radius: 15px; background: linear-gradient(135deg, #eef2ff, #fdf2f8); font-size: 22px; }
-.empty-ledger-box strong { font-size: 13px; }
-.empty-ledger-box span { color: var(--muted); font-size: 11px; }
+.ledger-filter-info span {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+}
+.ledger-filter-info strong {
+  color: #4f46e5;
+  font-size: 18px;
+}
+.ledger-table table {
+  min-width: 760px;
+}
+.ledger-date {
+  display: inline-flex;
+  padding: 5px 8px;
+  border-radius: 8px;
+  background: #f8fafc;
+  color: #475569;
+  font-size: 11px;
+  font-weight: 700;
+}
+.ledger-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.ledger-detail b {
+  color: var(--text);
+  font-size: 13px;
+}
+.ledger-detail span {
+  color: var(--muted);
+  font-size: 10px;
+}
+.amount-in {
+  display: inline-flex;
+  padding: 5px 8px;
+  border-radius: 8px;
+  color: #0369a1;
+  background: #ecfeff;
+  font-size: 12px;
+  font-weight: 800;
+}
+.amount-out {
+  display: inline-flex;
+  padding: 5px 8px;
+  border-radius: 8px;
+  color: #be185d;
+  background: #fdf2f8;
+  font-size: 12px;
+  font-weight: 800;
+}
+.balance-value {
+  color: #334155;
+  font-size: 12px;
+  font-weight: 700;
+}
+.empty-ledger {
+  padding: 35px 15px !important;
+  text-align: center !important;
+}
+.empty-ledger-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+.empty-ledger-box > div {
+  width: 50px;
+  height: 50px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 5px;
+  border-radius: 15px;
+  background: linear-gradient(135deg, #eef2ff, #fdf2f8);
+  font-size: 22px;
+}
+.empty-ledger-box strong {
+  font-size: 13px;
+}
+.empty-ledger-box span {
+  color: var(--muted);
+  font-size: 11px;
+}
+/* =========================================================
+   LEDGER - MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+  /* =========================
+     INCOME ENTRY
+  ========================= */
+
+  .ledger-entry-card {
+    padding: 17px;
+    border-radius: 16px;
+  }
+
+  .ledger-entry-card > .section-head {
+    margin-bottom: 16px;
+  }
+
+  .section-head {
+    gap: 10px;
+  }
+
+  .section-icon {
+    width: 38px;
+    height: 38px;
+
+    flex: 0 0 38px;
+
+    border-radius: 11px;
+
+    font-size: 16px;
+  }
+
+  .section-head h3 {
+    font-size: 15px;
+  }
+
+  .section-head p {
+    margin-top: 2px;
+    font-size: 10px;
+    line-height: 1.35;
+  }
+
+  /*
+    Date + Amount ko mobile par
+    ek ke neeche ek rakhenge
+  */
+  .ledger-main-fields {
+    grid-template-columns: 1fr !important;
+    gap: 0;
+  }
+
+  .ledger-entry-card .field-block {
+    margin-bottom: 13px;
+  }
+
+  .ledger-entry-card input,
+  .ledger-entry-card select {
+    min-height: 46px;
+
+    padding: 10px 11px;
+
+    font-size: 13px;
+  }
+
+  .amount-input-wrap input {
+    padding-left: 31px !important;
+  }
+
+  .form-actions {
+    margin-top: 2px;
+    padding-top: 14px;
+  }
+
+  .form-actions .ledger-save-btn {
+    width: 100%;
+
+    min-height: 46px;
+
+    min-width: 0;
+
+    border-radius: 11px;
+
+    font-size: 13px;
+  }
+
+  /* =========================
+     SUMMARY CARDS
+  ========================= */
+
+  .ledger-summary-grid {
+    grid-template-columns: 1fr;
+
+    gap: 9px;
+
+    margin-bottom: 13px;
+  }
+
+  .ledger-summary {
+    min-height: 86px;
+
+    padding: 14px 15px;
+
+    border-radius: 15px;
+
+    border-top-width: 3px;
+  }
+
+  .ledger-summary span {
+    font-size: 10px;
+  }
+
+  .ledger-summary strong {
+    margin-top: 3px;
+
+    font-size: 23px;
+
+    letter-spacing: -0.025em;
+  }
+
+  .ledger-summary small {
+    margin-top: 2px;
+
+    font-size: 9px;
+  }
+
+  /* =========================
+     LEDGER CARD
+  ========================= */
+
+  .ledger-card {
+    padding: 17px;
+
+    border-radius: 16px;
+  }
+
+  .ledger-title-row {
+    margin-bottom: 16px;
+  }
+
+  /* =========================
+     DATE FILTER
+  ========================= */
+
+  .ledger-filter-box {
+    grid-template-columns: 1fr;
+
+    gap: 10px;
+
+    margin-bottom: 14px;
+
+    padding: 12px;
+
+    border-radius: 13px;
+  }
+
+  .ledger-filter-box .field-block {
+    margin: 0;
+  }
+
+  .ledger-filter-box input,
+  .ledger-filter-box select {
+    min-height: 45px;
+
+    font-size: 13px;
+  }
+
+  .ledger-filter-info {
+    min-height: 40px;
+
+    padding: 7px 10px;
+
+    border-radius: 9px;
+  }
+
+  .ledger-filter-info span {
+    font-size: 9px;
+  }
+
+  .ledger-filter-info strong {
+    font-size: 16px;
+  }
+
+  /* =========================
+     TABLE
+  ========================= */
+
+  .ledger-table {
+    margin: 0 -2px;
+
+    border-radius: 12px;
+  }
+
+  .ledger-table table {
+    min-width: 700px;
+  }
+
+  .ledger-table th,
+  .ledger-table td {
+    padding: 9px 8px;
+  }
+
+  .ledger-date {
+    padding: 4px 7px;
+
+    font-size: 10px;
+  }
+
+  .ledger-detail {
+    gap: 1px;
+  }
+
+  .ledger-detail b {
+    font-size: 12px;
+  }
+
+  .ledger-detail span {
+    font-size: 9px;
+  }
+
+  .amount-in,
+  .amount-out {
+    padding: 4px 7px;
+
+    font-size: 10px;
+  }
+
+  .balance-value {
+    font-size: 10px;
+  }
+
+  /* =========================
+     EMPTY STATE
+  ========================= */
+
+  .empty-ledger {
+    padding: 28px 12px !important;
+  }
+
+  .empty-ledger-box > div {
+    width: 44px;
+    height: 44px;
+
+    border-radius: 13px;
+
+    font-size: 19px;
+  }
+
+  .empty-ledger-box strong {
+    font-size: 12px;
+  }
+
+  .empty-ledger-box span {
+    max-width: 250px;
+
+    font-size: 9px;
+
+    line-height: 1.4;
+  }
+}
+
+/* =========================================================
+   LEDGER - SMALL PHONES
+========================================================= */
+
+@media (max-width: 400px) {
+  .ledger-entry-card,
+  .ledger-card {
+    padding: 14px;
+  }
+
+  .ledger-entry-card > .section-head {
+    margin-bottom: 14px;
+  }
+
+  .section-icon {
+    width: 35px;
+    height: 35px;
+
+    flex-basis: 35px;
+
+    border-radius: 10px;
+
+    font-size: 15px;
+  }
+
+  .section-head h3 {
+    font-size: 14px;
+  }
+
+  .section-head p {
+    font-size: 9px;
+  }
+
+  .ledger-entry-card input,
+  .ledger-entry-card select {
+    min-height: 44px;
+
+    font-size: 12px;
+  }
+
+  .ledger-summary {
+    min-height: 80px;
+
+    padding: 12px 13px;
+  }
+
+  .ledger-summary strong {
+    font-size: 21px;
+  }
+
+  .ledger-summary span {
+    font-size: 9px;
+  }
+
+  .ledger-filter-box {
+    padding: 10px;
+  }
+
+  .ledger-filter-box input {
+    min-height: 43px;
+  }
+
+  .form-actions .ledger-save-btn {
+    min-height: 44px;
+
+    font-size: 12px;
+  }
+}

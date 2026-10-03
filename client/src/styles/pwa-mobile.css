@@ -26,3 +26,53 @@ textarea {
     padding-top: max(12px, env(safe-area-inset-top));
   }
 }
+/* =========================================================
+   PWA INSTALL BUTTON - MOBILE
+   ========================================================= */
+
+@media (max-width: 700px) {
+  .install-app-btn {
+    right: 12px;
+    bottom: calc(12px + env(safe-area-inset-bottom));
+
+    min-height: 40px;
+    padding: 0 13px;
+
+    border-radius: 12px;
+
+    font-size: 11px;
+  }
+
+  .install-app-icon {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 400px) {
+  .install-app-btn {
+    right: 10px;
+    bottom: calc(10px + env(safe-area-inset-bottom));
+
+    min-height: 38px;
+    padding: 0 11px;
+
+    border-radius: 11px;
+
+    font-size: 10px;
+  }
+}
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  overscroll-behavior-y: none;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}

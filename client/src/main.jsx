@@ -15,7 +15,7 @@ import "./styles/pages/requests.css";
 import "./styles/pages/complaints.css";
 import "./styles/pages/users.css";
 import "./styles/pages/profile.css";
-
+import "./styles/pages/activity.css";
 // Auth
 import "./styles/auth.css";
 

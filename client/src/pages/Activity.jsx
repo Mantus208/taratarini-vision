@@ -19,22 +19,24 @@ export default function Activity() {
 
   return (
     <>
-      <div className="card">
+      <div className="card activity-intro">
         <h3>🕘 Activity Log</h3>
         <p className="muted">
           Kisne, kab, kya kiya: yahan sab record hota hai. Ye record app se edit
           ya delete nahi ho sakta. Aakhri 200 entries dikhti hain.
         </p>
-        <label>Filter</label>
-        <select value={flt} onChange={(e) => setFlt(e.target.value)}>
-          {FILTERS.map((f) => (
-            <option key={f[0]} value={f[0]}>
-              {f[1]}
-            </option>
-          ))}
-        </select>
+        <div className="activity-filter">
+          <label>Filter</label>
+          <select value={flt} onChange={(e) => setFlt(e.target.value)}>
+            {FILTERS.map((f) => (
+              <option key={f[0]} value={f[0]}>
+                {f[1]}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
-      <div className="card">
+      <div className="card activity-card">
         <div className="tl">
           {rows.map((a) => (
             <div className="tl-item" key={a.id}>
@@ -50,7 +52,10 @@ export default function Activity() {
             </div>
           ))}
           {!rows.length && (
-            <span className="muted">Abhi koi activity nahi</span>
+            <div className="activity-empty">
+              <div className="activity-empty-icon">📭</div>
+              <strong>Abhi koi activity nahi</strong>
+            </div>
           )}
         </div>
       </div>

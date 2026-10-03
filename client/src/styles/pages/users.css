@@ -1,21 +1,87 @@
 /* Users page */
-.users-intro { display: flex; align-items: center; gap: 13px; }
-.users-intro .intro-icon { width: 42px; height: 42px; display: grid; place-items: center; flex: none; border-radius: 13px; background: linear-gradient(135deg, #eef2ff, #f5f3ff); }
-.users-intro h3 { margin: 0 0 4px; }
+.users-intro {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+.users-intro .intro-icon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  flex: none;
+  border-radius: 13px;
+  background: linear-gradient(135deg, #eef2ff, #f5f3ff);
+}
+.users-intro h3 {
+  margin: 0 0 4px;
+}
 
-.user-card { padding: 20px; }
-.user-card-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
-.user-name { margin: 0 0 2px; font-size: 17px; }
-.user-status { display: inline-flex; align-items: center; justify-content: center; padding: 6px 10px; border-radius: 999px; font-size: 11px; font-weight: 800; }
-.user-status.active { color: #166534; background: #dcfce7; }
-.user-status.pending { color: #92400e; background: #fef3c7; }
-.user-status.disabled { color: #991b1b; background: #fee2e2; }
+.user-card {
+  padding: 20px;
+}
+.user-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+.user-name {
+  margin: 0 0 2px;
+  font-size: 17px;
+}
+.user-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+}
+.user-status.active {
+  color: #166534;
+  background: #dcfce7;
+}
+.user-status.pending {
+  color: #92400e;
+  background: #fef3c7;
+}
+.user-status.disabled {
+  color: #991b1b;
+  background: #fee2e2;
+}
 
-.permission-section { margin-top: 8px; padding: 15px; border: 1px solid rgba(99,102,241,0.09); border-radius: 15px; background: linear-gradient(180deg, rgba(248,250,252,0.95), rgba(255,255,255,0.82)); }
-.permission-title { margin-bottom: 8px; }
-.permission-title strong { display: block; font-size: 14px; }
-.permission-title span { display: block; margin-top: 2px; color: var(--muted); font-size: 11px; }
-.permissions { display: flex; flex-direction: column; gap: 2px; }
+.permission-section {
+  margin-top: 8px;
+  padding: 15px;
+  border: 1px solid rgba(99, 102, 241, 0.09);
+  border-radius: 15px;
+  background: linear-gradient(
+    180deg,
+    rgba(248, 250, 252, 0.95),
+    rgba(255, 255, 255, 0.82)
+  );
+}
+.permission-title {
+  margin-bottom: 8px;
+}
+.permission-title strong {
+  display: block;
+  font-size: 14px;
+}
+.permission-title span {
+  display: block;
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 11px;
+}
+.permissions {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
 
 .perm {
   width: 100%;
@@ -27,13 +93,321 @@
   margin: 0;
   padding: 8px 10px;
   border-radius: 10px;
-  transition: background 0.16s ease, transform 0.16s ease;
+  transition:
+    background 0.16s ease,
+    transform 0.16s ease;
 }
 
-.perm:hover { background: linear-gradient(90deg, rgba(99,102,241,0.06), rgba(236,72,153,0.025)); transform: translateX(2px); }
-.perm label { flex: 1; min-width: 0; margin: 0 !important; color: var(--text); font-size: 13px; font-weight: 500; line-height: 1.35; cursor: pointer; }
-.perm input[type="checkbox"] { flex: 0 0 18px; width: 18px !important; min-width: 18px !important; max-width: 18px !important; height: 18px !important; margin: 0 !important; padding: 0 !important; cursor: pointer; accent-color: #6366f1; appearance: auto; box-shadow: none !important; }
-.perm input[type="checkbox"]:focus { outline: none; box-shadow: 0 0 0 3px rgba(99,102,241,0.14) !important; }
+.perm:hover {
+  background: linear-gradient(
+    90deg,
+    rgba(99, 102, 241, 0.06),
+    rgba(236, 72, 153, 0.025)
+  );
+  transform: translateX(2px);
+}
+.perm label {
+  flex: 1;
+  min-width: 0;
+  margin: 0 !important;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.35;
+  cursor: pointer;
+}
+.perm input[type="checkbox"] {
+  flex: 0 0 18px;
+  width: 18px !important;
+  min-width: 18px !important;
+  max-width: 18px !important;
+  height: 18px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  cursor: pointer;
+  accent-color: #6366f1;
+  appearance: auto;
+  box-shadow: none !important;
+}
+.perm input[type="checkbox"]:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.14) !important;
+}
 
-.user-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 9px; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); }
-.user-actions .btn { margin: 0 !important; }
+.user-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+.user-actions .btn {
+  margin: 0 !important;
+}
+/* =========================================================
+   USERS - MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+  /* =========================
+     INTRO
+  ========================= */
+
+  .users-intro {
+    gap: 10px;
+
+    padding: 16px;
+  }
+
+  .users-intro .intro-icon {
+    width: 38px;
+    height: 38px;
+
+    flex: 0 0 38px;
+
+    border-radius: 11px;
+
+    font-size: 16px;
+  }
+
+  .users-intro h3 {
+    margin-bottom: 3px;
+
+    font-size: 15px;
+  }
+
+  .users-intro .muted {
+    font-size: 9px;
+
+    line-height: 1.4;
+  }
+
+  /* =========================
+     USER CARD
+  ========================= */
+
+  .user-card {
+    padding: 16px;
+
+    border-radius: 16px;
+  }
+
+  .user-card-head {
+    align-items: flex-start;
+
+    gap: 10px;
+
+    margin-bottom: 15px;
+  }
+
+  .user-name {
+    margin-bottom: 2px;
+
+    font-size: 15px;
+
+    line-height: 1.25;
+  }
+
+  .user-card-head .muted {
+    font-size: 9px;
+  }
+
+  .user-status {
+    flex: none;
+
+    padding: 5px 8px;
+
+    border-radius: 999px;
+
+    font-size: 9px;
+  }
+
+  /* =========================
+     PERMISSION PANEL
+  ========================= */
+
+  .permission-section {
+    margin-top: 6px;
+
+    padding: 11px;
+
+    border-radius: 13px;
+  }
+
+  .permission-title {
+    margin-bottom: 7px;
+  }
+
+  .permission-title strong {
+    font-size: 12px;
+  }
+
+  .permission-title span {
+    margin-top: 2px;
+
+    font-size: 9px;
+
+    line-height: 1.35;
+  }
+
+  /* =========================
+     PERMISSION ROW
+  ========================= */
+
+  .permissions {
+    gap: 1px;
+  }
+
+  .perm {
+    min-height: 39px;
+
+    gap: 10px;
+
+    padding: 7px 8px;
+
+    border-radius: 9px;
+  }
+
+  .perm label {
+    font-size: 11px;
+
+    line-height: 1.3;
+  }
+
+  .perm input[type="checkbox"] {
+    flex: 0 0 18px;
+
+    width: 18px !important;
+    min-width: 18px !important;
+    max-width: 18px !important;
+
+    height: 18px !important;
+  }
+
+  /* =========================
+     ACTION BUTTONS
+  ========================= */
+
+  .user-actions {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 7px;
+
+    margin-top: 14px;
+
+    padding-top: 13px;
+  }
+
+  .user-actions .btn {
+    width: 100%;
+
+    min-height: 43px;
+
+    min-width: 0 !important;
+
+    margin: 0 !important;
+
+    padding: 8px 7px;
+
+    border-radius: 10px;
+
+    font-size: 10px;
+
+    white-space: normal;
+  }
+}
+
+/* =========================================================
+   USERS - SMALL PHONES
+========================================================= */
+
+@media (max-width: 400px) {
+  .users-intro {
+    padding: 14px;
+  }
+
+  .users-intro .intro-icon {
+    width: 35px;
+    height: 35px;
+
+    flex-basis: 35px;
+
+    border-radius: 10px;
+  }
+
+  .users-intro h3 {
+    font-size: 14px;
+  }
+
+  .users-intro .muted {
+    font-size: 8px;
+  }
+
+  .user-card {
+    padding: 13px;
+  }
+
+  .user-card-head {
+    margin-bottom: 12px;
+  }
+
+  .user-name {
+    font-size: 14px;
+  }
+
+  .user-card-head .muted {
+    font-size: 8px;
+  }
+
+  .user-status {
+    padding: 4px 7px;
+
+    font-size: 8px;
+  }
+
+  .permission-section {
+    padding: 9px;
+  }
+
+  .permission-title strong {
+    font-size: 11px;
+  }
+
+  .permission-title span {
+    font-size: 8px;
+  }
+
+  .perm {
+    min-height: 36px;
+
+    padding: 6px 7px;
+  }
+
+  .perm label {
+    font-size: 10px;
+  }
+
+  .perm input[type="checkbox"] {
+    width: 17px !important;
+    min-width: 17px !important;
+    max-width: 17px !important;
+
+    height: 17px !important;
+  }
+
+  .user-actions {
+    gap: 6px;
+  }
+
+  .user-actions .btn {
+    min-height: 40px;
+
+    padding: 7px 5px;
+
+    font-size: 9px;
+  }
+}
