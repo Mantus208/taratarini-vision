@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 const {
   User,
@@ -530,7 +531,11 @@ router.post(
       throw fail("A field visit is already active.");
     }
 
+    const visitToken = crypto.randomUUID();
+
     c.fieldVisit.status = "Active";
+    c.fieldVisit.visitToken = visitToken;
+
     c.fieldVisit.startedBy = req.user.username;
     c.fieldVisit.startedAt = new Date();
 
@@ -539,7 +544,6 @@ router.post(
       lng,
       accuracy: Number.isFinite(accuracy) ? accuracy : null,
     };
-
     await c.save();
 
     await logActivity(
@@ -552,6 +556,7 @@ router.post(
       message: "Field visit started successfully.",
       fieldVisit: {
         status: "Active",
+        visitToken,
         startedAt: c.fieldVisit.startedAt,
         distance: check.distance,
         knownSite: check.knownSite,
@@ -578,6 +583,20 @@ router.post(
     if (c.fieldVisit?.status !== "Active") {
       throw fail(
         "You must start a field visit before resolving this complaint.",
+      );
+    }
+
+    const visitToken = str(req.body.visitToken);
+
+    if (!visitToken) {
+      throw fail(
+        "This field visit can only be completed from the device where it was started.",
+      );
+    }
+
+    if (!c.fieldVisit?.visitToken || c.fieldVisit.visitToken !== visitToken) {
+      throw fail(
+        "This field visit was started on another device. Please complete it from the same device.",
       );
     }
 

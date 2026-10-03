@@ -176,6 +176,11 @@ const Complaint = mongoose.model(
           default: "NotStarted",
         },
 
+        visitToken: {
+          type: String,
+          default: "",
+        },
+
         startedBy: {
           type: String,
           default: "",
@@ -226,10 +231,6 @@ const Complaint = mongoose.model(
           },
         },
 
-        /*
-         * One compressed image as data URL.
-         * Frontend will resize/compress before sending.
-         */
         photoData: {
           type: String,
           default: "",
