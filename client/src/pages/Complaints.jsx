@@ -1,73 +1,193 @@
 import { useState } from "react";
+
 import { act, useFetch } from "../api";
+
 import { CmpCard } from "../components";
 
 export default function Complaints({ me }) {
   const P = me.perms;
+
   const [f, setF] = useState({
     category: "Optical Cable (Field)",
     scope: "Single",
     location: "",
     description: "",
   });
+
   const list = useFetch("/complaints") || [];
-  const set = (k) => (e) => setF({ ...f, [k]: e.target.value });
+
+  const set = (k) => (e) =>
+    setF({
+      ...f,
+      [k]: e.target.value,
+    });
 
   const send = async () => {
-    if (await act("/complaints", "POST", f))
-      setF({ ...f, location: "", description: "" });
+    if (await act("/complaints", "POST", f)) {
+      setF({
+        ...f,
+        location: "",
+        description: "",
+      });
+    }
   };
+
   const open = list.filter((c) => c.status === "Open");
+
   const done = list.filter((c) => c.status === "Resolved");
 
   return (
     <>
+      {/* =====================================================
+          NEW COMPLAINT
+      ===================================================== */}
       {P.canRaiseComplaint && (
-        <div className="card">
-          <h3>🎫 Nayi Complaint (Ticket)</h3>
-          <div className="row2">
+        <div className="card complaint-create-card">
+          <div className="complaint-create-head">
+            <div className="section-icon complaint-main-icon">🎫</div>
+
             <div>
-              <label>Category</label>
-              <select value={f.category} onChange={set("category")}>
-                <option>Optical Cable (Field)</option>
-                <option>Office</option>
-                <option>Other</option>
-              </select>
-            </div>
-            <div>
-              <label>Kitna affect?</label>
-              <select value={f.scope} onChange={set("scope")}>
-                <option value="Single">Ek customer</option>
-                <option value="Area">Area (kai customer)</option>
-                <option value="Village">Poora gaon off</option>
-                <option value="Main">Main line</option>
-              </select>
+              <h3>Nayi Complaint</h3>
+
+              <p>Problem ko ticket ke form mein raise karein.</p>
             </div>
           </div>
-          <label>Location / Customer / Gaon ka naam</label>
-          <input value={f.location} onChange={set("location")} />
-          <label>Problem ka detail</label>
-          <textarea value={f.description} onChange={set("description")} />
-          <button className="btn" onClick={send}>
-            Ticket banao
-          </button>
+
+          <div className="complaint-form">
+            <div className="row2">
+              {/* CATEGORY */}
+              <div className="field-block">
+                <label>Category</label>
+
+                <select value={f.category} onChange={set("category")}>
+                  <option>Optical Cable (Field)</option>
+
+                  <option>Office</option>
+
+                  <option>Other</option>
+                </select>
+              </div>
+
+              {/* SCOPE */}
+              <div className="field-block">
+                <label>Kitna affect?</label>
+
+                <select value={f.scope} onChange={set("scope")}>
+                  <option value="Single">Ek customer</option>
+
+                  <option value="Area">Area (kai customer)</option>
+
+                  <option value="Village">Poora gaon off</option>
+
+                  <option value="Main">Main line</option>
+                </select>
+              </div>
+            </div>
+
+            {/* LOCATION */}
+            <div className="field-block">
+              <label>Location / Customer / Gaon ka naam</label>
+
+              <input
+                value={f.location}
+                onChange={set("location")}
+                placeholder="Example: Purusottampur"
+              />
+            </div>
+
+            {/* DESCRIPTION */}
+            <div className="field-block">
+              <label>Problem ka detail</label>
+
+              <textarea
+                value={f.description}
+                onChange={set("description")}
+                placeholder="Problem ko thoda detail mein likhiye..."
+              />
+            </div>
+
+            {/* ACTION */}
+            <div className="form-actions">
+              <button
+                type="button"
+                className="btn complaint-send-btn"
+                onClick={send}
+              >
+                🎫 Ticket banao
+              </button>
+            </div>
+          </div>
         </div>
       )}
-      <div className="card">
-        <h3>🔥 Open (priority ke hisaab se) - {open.length}</h3>
-        {open.map((c) => (
-          <CmpCard key={c.id} c={c} P={P} />
-        ))}
-        {!open.length && (
-          <span className="muted">Koi open complaint nahi 🎉</span>
-        )}
+
+      {/* =====================================================
+          OPEN COMPLAINTS
+      ===================================================== */}
+      <div className="card complaint-list-card open-complaint-card">
+        <div className="complaint-list-head">
+          <div className="complaint-list-title">
+            <div className="complaint-list-icon open-icon">🔥</div>
+
+            <div>
+              <h3>Open Complaints</h3>
+
+              <span>Priority ke hisaab se</span>
+            </div>
+          </div>
+
+          <div className="complaint-count open-count">{open.length}</div>
+        </div>
+
+        <div className="complaint-list-body">
+          {open.map((c) => (
+            <CmpCard key={c.id} c={c} P={P} />
+          ))}
+
+          {!open.length && (
+            <div className="complaint-empty">
+              <div className="complaint-empty-icon success-empty">✓</div>
+
+              <strong>Koi open complaint nahi</strong>
+
+              <span>Sabhi complaints currently clear hain 🎉</span>
+            </div>
+          )}
+        </div>
       </div>
-      <div className="card">
-        <h3>Resolved - {done.length}</h3>
-        {done.slice(0, 30).map((c) => (
-          <CmpCard key={c.id} c={c} P={P} />
-        ))}
-        {!done.length && <span className="muted">Kuch nahi</span>}
+
+      {/* =====================================================
+          RESOLVED
+      ===================================================== */}
+      <div className="card complaint-list-card resolved-complaint-card">
+        <div className="complaint-list-head">
+          <div className="complaint-list-title">
+            <div className="complaint-list-icon resolved-icon">✅</div>
+
+            <div>
+              <h3>Resolved</h3>
+
+              <span>Recently completed complaints</span>
+            </div>
+          </div>
+
+          <div className="complaint-count resolved-count">{done.length}</div>
+        </div>
+
+        <div className="complaint-list-body">
+          {done.slice(0, 30).map((c) => (
+            <CmpCard key={c.id} c={c} P={P} />
+          ))}
+
+          {!done.length && (
+            <div className="complaint-empty">
+              <div className="complaint-empty-icon">📭</div>
+
+              <strong>Kuch nahi</strong>
+
+              <span>Abhi koi resolved complaint nahi hai.</span>
+            </div>
+          )}
+        </div>
       </div>
     </>
   );

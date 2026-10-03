@@ -1,0 +1,39 @@
+/* Users page */
+.users-intro { display: flex; align-items: center; gap: 13px; }
+.users-intro .intro-icon { width: 42px; height: 42px; display: grid; place-items: center; flex: none; border-radius: 13px; background: linear-gradient(135deg, #eef2ff, #f5f3ff); }
+.users-intro h3 { margin: 0 0 4px; }
+
+.user-card { padding: 20px; }
+.user-card-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
+.user-name { margin: 0 0 2px; font-size: 17px; }
+.user-status { display: inline-flex; align-items: center; justify-content: center; padding: 6px 10px; border-radius: 999px; font-size: 11px; font-weight: 800; }
+.user-status.active { color: #166534; background: #dcfce7; }
+.user-status.pending { color: #92400e; background: #fef3c7; }
+.user-status.disabled { color: #991b1b; background: #fee2e2; }
+
+.permission-section { margin-top: 8px; padding: 15px; border: 1px solid rgba(99,102,241,0.09); border-radius: 15px; background: linear-gradient(180deg, rgba(248,250,252,0.95), rgba(255,255,255,0.82)); }
+.permission-title { margin-bottom: 8px; }
+.permission-title strong { display: block; font-size: 14px; }
+.permission-title span { display: block; margin-top: 2px; color: var(--muted); font-size: 11px; }
+.permissions { display: flex; flex-direction: column; gap: 2px; }
+
+.perm {
+  width: 100%;
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin: 0;
+  padding: 8px 10px;
+  border-radius: 10px;
+  transition: background 0.16s ease, transform 0.16s ease;
+}
+
+.perm:hover { background: linear-gradient(90deg, rgba(99,102,241,0.06), rgba(236,72,153,0.025)); transform: translateX(2px); }
+.perm label { flex: 1; min-width: 0; margin: 0 !important; color: var(--text); font-size: 13px; font-weight: 500; line-height: 1.35; cursor: pointer; }
+.perm input[type="checkbox"] { flex: 0 0 18px; width: 18px !important; min-width: 18px !important; max-width: 18px !important; height: 18px !important; margin: 0 !important; padding: 0 !important; cursor: pointer; accent-color: #6366f1; appearance: auto; box-shadow: none !important; }
+.perm input[type="checkbox"]:focus { outline: none; box-shadow: 0 0 0 3px rgba(99,102,241,0.14) !important; }
+
+.user-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 9px; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); }
+.user-actions .btn { margin: 0 !important; }

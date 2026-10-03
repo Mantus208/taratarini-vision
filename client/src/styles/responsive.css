@@ -1,0 +1,75 @@
+@media (max-width: 980px) {
+  :root { --side: 255px; }
+  .wrap { padding: 22px 20px 50px; }
+  .topbar { padding-inline: 20px; }
+}
+
+@media (max-width: 900px) {
+  .side { transform: translateX(-100%); }
+  .side.open { transform: translateX(0); box-shadow: 18px 0 50px rgba(0,0,0,0.25); }
+  .overlay.show { display: block; position: fixed; inset: 0; z-index: 40; background: rgba(2,20,19,0.48); backdrop-filter: blur(3px); }
+  .main { margin-left: 0; }
+  .menu-btn { display: grid; place-items: center; }
+  .topbar { min-height: 64px; padding: 10px 14px; }
+  .topbar .date { display: none; }
+  .wrap { padding: 17px 14px 50px; }
+  .auth { max-width: 520px; }
+  .auth-card { grid-template-columns: 1fr; min-height: auto; }
+  .auth-brand { padding: 28px; min-height: 300px; }
+  .auth-brand h1 { font-size: 30px; }
+  .auth-brand-description { max-width: 100%; margin-top: 12px; }
+  .auth-features { display: grid; grid-template-columns: repeat(2,1fr); margin-top: 20px; }
+  .auth-brand-footer { display: none; }
+  .auth-form { padding: 32px 28px 34px; }
+}
+
+@media (max-width: 800px) {
+  .ledger-summary-grid { grid-template-columns: 1fr; }
+  .ledger-filter-box { grid-template-columns: 1fr 1fr; }
+  .ledger-filter-info { grid-column: 1 / -1; }
+}
+
+@media (max-width: 700px) {
+  .profile-cover { height: 100px; }
+  .profile-main { align-items: flex-end; padding: 0 16px 14px; margin-top: -30px; }
+  .profile-avatar { width: 65px; height: 65px; border-radius: 18px; font-size: 23px; }
+  .profile-identity { padding-top: 35px; }
+  .profile-name-row h3 { font-size: 18px; }
+  .profile-info-grid { grid-template-columns: 1fr; }
+  .profile-info-item { border-right: 0; border-bottom: 1px solid var(--line); padding: 11px 16px; }
+  .profile-info-item:last-child { border-bottom: 0; }
+  .profile-permissions { grid-template-columns: 1fr; }
+  .profile-notification-card, .profile-password-card, .profile-permission-card { padding: 17px; }
+  .profile-actions { flex-direction: column; align-items: stretch; }
+  .profile-actions .btn { width: 100%; }
+  .profile-password-btn { width: 100%; }
+}
+
+@media (max-width: 640px) {
+  .grid { grid-template-columns: 1fr; }
+  .row2 { grid-template-columns: 1fr !important; }
+  .hero { padding: 19px; }
+  .hero h3 { font-size: 20px; }
+  .card { padding: 15px; border-radius: 14px; }
+  .stat { padding: 16px; }
+  .topbar h2 { font-size: 18px; }
+  .request-create-card, .complaint-create-card { padding: 17px; }
+  .request-group-head, .complaint-list-head { padding: 14px; }
+  .request-group-body, .complaint-list-body { padding: 12px; }
+  .request-send-btn, .complaint-send-btn { width: 100%; }
+  .ledger-filter-box { grid-template-columns: 1fr; }
+  .ledger-filter-info { grid-column: auto; }
+  .ledger-entry-card, .ledger-card { padding: 17px; }
+  .ledger-save-btn { width: 100%; }
+  .form-actions { display: block; }
+  .user-card-head { align-items: flex-start; flex-direction: column; }
+  .users-intro { align-items: flex-start; }
+  .authbg { padding: 14px; }
+  .auth-card { border-radius: 21px; }
+  .auth-brand { padding: 24px; min-height: 275px; }
+  .auth-brand-title { font-size: 19px; }
+  .auth-brand h1 { font-size: 26px; margin-top: 20px; }
+  .auth-features { grid-template-columns: 1fr; gap: 7px; }
+  .auth-form { padding: 27px 20px 30px; }
+  .auth-form-top h2 { font-size: 25px; }
+}

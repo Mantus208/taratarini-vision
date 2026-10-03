@@ -1,0 +1,31 @@
+/* Complaints page */
+.complaint-create-card { padding: 23px; }
+.complaint-create-head { display: flex; align-items: center; gap: 12px; margin-bottom: 21px; }
+.complaint-create-head h3 { margin: 0; font-size: 18px; }
+.complaint-create-head p { margin-top: 3px; color: var(--muted); font-size: 11px; }
+.complaint-main-icon { color: #db2777; background: linear-gradient(135deg, #fdf2f8, #f5f3ff, #eef2ff); }
+.complaint-form .field-block { margin-bottom: 16px; }
+.complaint-form textarea { min-height: 115px; }
+.complaint-send-btn { min-width: 165px; margin: 0 !important; }
+
+.complaint-list-card { padding: 0; overflow: hidden; }
+.complaint-list-head { display: flex; align-items: center; justify-content: space-between; padding: 16px 19px; border-bottom: 1px solid var(--line); background: linear-gradient(135deg, rgba(248,250,252,0.95), rgba(255,255,255,0.90)); }
+.complaint-list-title { display: flex; align-items: center; gap: 11px; }
+.complaint-list-title h3 { margin: 0; font-size: 15px; }
+.complaint-list-title span { display: block; margin-top: 2px; color: var(--muted); font-size: 10px; }
+.complaint-list-icon { width: 39px; height: 39px; display: grid; place-items: center; border-radius: 12px; font-size: 17px; }
+.open-complaint-card { border-top: 3px solid #f43f5e; }
+.open-icon { background: linear-gradient(135deg, #fff1f2, #fce7f3); }
+.open-count { color: #be123c; background: #ffe4e6; }
+.resolved-complaint-card { border-top: 3px solid #6366f1; }
+.resolved-icon { background: linear-gradient(135deg, #eef2ff, #e0f2fe); }
+.resolved-count { color: #4338ca; background: #e0e7ff; }
+.complaint-count { min-width: 31px; height: 31px; padding: 0 9px; display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; font-size: 12px; font-weight: 800; }
+.complaint-list-body { padding: 15px 19px 18px; }
+.complaint-list-body > .card { margin-bottom: 10px; box-shadow: none; background: rgba(248,250,252,0.58); }
+.complaint-list-body > .card:last-child { margin-bottom: 0; }
+.complaint-empty { min-height: 115px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-align: center; color: var(--muted); }
+.complaint-empty-icon { width: 42px; height: 42px; display: grid; place-items: center; margin-bottom: 4px; border-radius: 13px; font-size: 18px; background: linear-gradient(135deg, #eef2ff, #f5f3ff); }
+.success-empty { color: #0891b2; background: linear-gradient(135deg, #ecfeff, #e0f2fe); }
+.complaint-empty strong { color: var(--text); font-size: 13px; }
+.complaint-empty span { font-size: 10px; }

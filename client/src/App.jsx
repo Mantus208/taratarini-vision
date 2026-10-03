@@ -124,59 +124,81 @@ export default function App() {
 
   return (
     <div className="shell">
+      {/* ================= SIDEBAR ================= */}
       <aside className={"side" + (open ? " open" : "")}>
         <div className="brand">
           <div className="logo">🏢</div>
+
           <div>
-            Taratarini Vision<small>OFFICE MANAGER</small>
+            <div>Taratarini Vision</div>
+            <small>OFFICE MANAGER</small>
           </div>
         </div>
+
         <nav className="navlist">
           {tabs.map((t) => (
             <button
               key={t.id}
+              type="button"
               className={"navitem" + (cur === t.id ? " on" : "")}
               onClick={() => go(t.id)}
             >
               <span className="ic">{t.ic}</span>
+
               <span className="lbl">{t.label}</span>
+
               {t.badge > 0 && <span className="badge">{t.badge}</span>}
             </button>
           ))}
         </nav>
+
+        {/* USER AREA */}
         <div className="userbox">
           <div className="avatar">
             {(me.name || "?").trim().charAt(0).toUpperCase()}
           </div>
+
           <div className="who">
             <b>{me.name}</b>
             <span>{role}</span>
           </div>
-          <button className="out-btn" onClick={logout}>
+
+          <button type="button" className="out-btn" onClick={logout}>
             Logout
           </button>
         </div>
       </aside>
+
+      {/* MOBILE OVERLAY */}
       <div
         className={"overlay" + (open ? " show" : "")}
         onClick={() => setOpen(false)}
+        aria-hidden="true"
       />
+
+      {/* ================= MAIN ================= */}
       <div className="main">
         <header className="topbar">
           <button
+            type="button"
             className="menu-btn"
             onClick={() => setOpen(true)}
-            aria-label="Menu"
+            aria-label="Open menu"
           >
             ☰
           </button>
+
           <h2>
-            {curTab.ic} {curTab.label}
+            <span>{curTab.ic}</span>
+            <span>{curTab.label}</span>
           </h2>
+
           <span className="date">{dateStr}</span>
         </header>
-        <div className="wrap">{pages[cur]}</div>
+
+        <main className="wrap">{pages[cur]}</main>
       </div>
+
       {toastEl}
     </div>
   );
