@@ -23,16 +23,24 @@ body {
       transparent 28%
     ),
     var(--bg);
+
   color: var(--text);
+
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+
   font-size: 15px;
   line-height: 1.5;
+  font-weight: 400;
+  text-rendering: auto;
 }
 
 button,
 input,
 select,
 textarea {
-  font: inherit;
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+
+  font-weight: 400;
 }
 
 button {
@@ -46,11 +54,13 @@ button {
 h1,
 h2,
 h3,
-h4 {
+h4,
+h5,
+h6 {
   margin: 0;
   color: var(--text);
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: normal;
 }
 
 p {
@@ -130,34 +140,4 @@ textarea {
 .out {
   color: #be185d;
   font-weight: 700;
-}
-/* Firefox font rendering fix */
-@-moz-document url-prefix() {
-  body,
-  button,
-  input,
-  select,
-  textarea {
-    font-weight: 400;
-  }
-
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6,
-  strong,
-  b {
-    font-weight: 600;
-  }
-}
-@-moz-document url-prefix() {
-  * {
-    text-shadow: none !important;
-  }
-
-  body {
-    font-weight: 400;
-  }
 }
