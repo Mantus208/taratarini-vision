@@ -111,22 +111,150 @@ const Complaint = mongoose.model(
   "Complaint",
   new Schema(
     {
-      code: { type: String, unique: true }, // T-0001
-      category: String,
+      code: {
+        type: String,
+        unique: true,
+      },
+
+      category: {
+        type: String,
+        default: "Other",
+      },
+
       scope: {
         type: String,
         enum: ["Single", "Area", "Village", "Main"],
         default: "Single",
       },
-      location: String,
-      description: String,
-      raisedBy: String,
-      status: { type: String, enum: ["Open", "Resolved"], default: "Open" },
-      resolvedBy: String,
-      resolvedAt: Date,
-      note: { type: String, default: "" },
+
+      location: {
+        type: String,
+        default: "",
+      },
+
+      description: {
+        type: String,
+        default: "",
+      },
+
+      raisedBy: {
+        type: String,
+        default: "",
+      },
+
+      /*
+       * Optional known site location.
+       *
+       * Customer does NOT submit this.
+       * Later this can come from customer/transmitter
+       * master data if available.
+       */
+      siteLocation: {
+        lat: {
+          type: Number,
+          default: null,
+        },
+        lng: {
+          type: Number,
+          default: null,
+        },
+      },
+
+      status: {
+        type: String,
+        enum: ["Open", "Resolved"],
+        default: "Open",
+      },
+
+      /*
+       * Field verification
+       */
+      fieldVisit: {
+        status: {
+          type: String,
+          enum: ["NotStarted", "Active", "Completed"],
+          default: "NotStarted",
+        },
+
+        startedBy: {
+          type: String,
+          default: "",
+        },
+
+        startedAt: {
+          type: Date,
+          default: null,
+        },
+
+        startLocation: {
+          lat: {
+            type: Number,
+            default: null,
+          },
+          lng: {
+            type: Number,
+            default: null,
+          },
+          accuracy: {
+            type: Number,
+            default: null,
+          },
+        },
+
+        completedBy: {
+          type: String,
+          default: "",
+        },
+
+        completedAt: {
+          type: Date,
+          default: null,
+        },
+
+        completeLocation: {
+          lat: {
+            type: Number,
+            default: null,
+          },
+          lng: {
+            type: Number,
+            default: null,
+          },
+          accuracy: {
+            type: Number,
+            default: null,
+          },
+        },
+
+        /*
+         * One compressed image as data URL.
+         * Frontend will resize/compress before sending.
+         */
+        photoData: {
+          type: String,
+          default: "",
+        },
+      },
+
+      resolvedBy: {
+        type: String,
+        default: "",
+      },
+
+      resolvedAt: {
+        type: Date,
+        default: null,
+      },
+
+      note: {
+        type: String,
+        default: "",
+      },
     },
-    { timestamps: true },
+
+    {
+      timestamps: true,
+    },
   ),
 );
 

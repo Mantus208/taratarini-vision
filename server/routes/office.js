@@ -32,7 +32,67 @@ const SCOPE_TXT = {
   Village: "Poora gaon off",
   Main: "Main line",
 };
+const FIELD_RADIUS_METERS = Number(process.env.FIELD_RADIUS_METERS || 100);
 
+const MAX_GPS_ACCURACY_METERS = Number(
+  process.env.MAX_GPS_ACCURACY_METERS || 200,
+);
+
+const validGps = (lat, lng) =>
+  Number.isFinite(lat) &&
+  Number.isFinite(lng) &&
+  lat >= -90 &&
+  lat <= 90 &&
+  lng >= -180 &&
+  lng <= 180;
+
+function distanceMeters(lat1, lng1, lat2, lng2) {
+  const R = 6371000;
+
+  const toRad = (v) => (v * Math.PI) / 180;
+
+  const dLat = toRad(lat2 - lat1);
+  const dLng = toRad(lng2 - lng1);
+
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  return R * c;
+}
+
+function verifyFieldLocation(c, lat, lng) {
+  /*
+   * If complaint has a known site location,
+   * enforce radius verification.
+   *
+   * If no known site location exists, GPS is still
+   * captured as field evidence, but exact fault location
+   * cannot be mathematically verified.
+   */
+  if (c.siteLocation?.lat == null || c.siteLocation?.lng == null) {
+    return {
+      verified: true,
+      distance: null,
+      knownSite: false,
+    };
+  }
+
+  const distance = distanceMeters(
+    c.siteLocation.lat,
+    c.siteLocation.lng,
+    lat,
+    lng,
+  );
+
+  return {
+    verified: distance <= FIELD_RADIUS_METERS,
+    distance,
+    knownSite: true,
+  };
+}
 // ---------- names + summary ----------
 router.get(
   "/names",
@@ -378,6 +438,14 @@ router.get(
           prio: p.label,
           score: p.score,
           hours: p.hours,
+          fieldVisit: {
+            status: c.fieldVisit?.status || "NotStarted",
+            startedBy: c.fieldVisit?.startedBy || "",
+            startedAt: c.fieldVisit?.startedAt || null,
+            completedBy: c.fieldVisit?.completedBy || "",
+            completedAt: c.fieldVisit?.completedAt || null,
+            hasPhoto: Boolean(c.fieldVisit?.photoData),
+          },
         };
       })
       .sort(
@@ -424,33 +492,192 @@ router.post(
     res.json({ message: "Ticket " + c.code + " ban gaya" });
   }),
 );
-
 router.post(
-  "/complaints/:code/resolve",
-  need("canResolve", "Resolve karne ki permission nahi hai"),
+  "/complaints/:code/field-visit/start",
+  need("canResolve", "You do not have permission to start a field visit."),
   h(async (req, res) => {
-    const c = await Complaint.findOne({ code: req.params.code });
-    if (!c) throw fail("Ticket nahi mila", 404);
-    if (c.status === "Resolved") throw fail("Ye pehle se resolve hai");
-    Object.assign(c, {
-      status: "Resolved",
-      resolvedBy: req.user.username,
-      resolvedAt: new Date(),
-      note: str(req.body.note),
+    const c = await Complaint.findOne({
+      code: req.params.code,
     });
+
+    if (!c) {
+      throw fail("Complaint not found.", 404);
+    }
+
+    if (c.status !== "Open") {
+      throw fail("This complaint is already resolved.");
+    }
+
+    const lat = Number(req.body.lat);
+    const lng = Number(req.body.lng);
+    const accuracy = Number(req.body.accuracy);
+
+    if (!validGps(lat, lng)) {
+      throw fail("A valid GPS location is required.");
+    }
+
+    if (Number.isFinite(accuracy) && accuracy > MAX_GPS_ACCURACY_METERS) {
+      throw fail(
+        "GPS accuracy is too low. Please move to an open area and try again.",
+      );
+    }
+
+    const check = verifyFieldLocation(c, lat, lng);
+
+    if (!check.verified) {
+      throw fail(
+        `You are outside the allowed complaint location radius. Current distance: ${Math.round(
+          check.distance,
+        )} meters.`,
+      );
+    }
+
+    if (!c.fieldVisit) {
+      c.fieldVisit = {};
+    }
+
+    if (c.fieldVisit.status === "Active") {
+      throw fail("A field visit is already active.");
+    }
+
+    c.fieldVisit.status = "Active";
+    c.fieldVisit.startedBy = req.user.username;
+    c.fieldVisit.startedAt = new Date();
+
+    c.fieldVisit.startLocation = {
+      lat,
+      lng,
+      accuracy: Number.isFinite(accuracy) ? accuracy : null,
+    };
+
     await c.save();
-    logActivity(
+
+    await logActivity(
       "resolve",
       req.user.username,
-      `Ticket ${c.code} (${c.location}) resolve kiya` +
-        (c.note ? ` · ${c.note}` : ""),
+      `Field visit started for ticket ${c.code} (${c.location})`,
     );
+
+    res.json({
+      message: "Field visit started successfully.",
+      fieldVisit: {
+        status: "Active",
+        startedAt: c.fieldVisit.startedAt,
+        distance: check.distance,
+        knownSite: check.knownSite,
+      },
+    });
+  }),
+);
+router.post(
+  "/complaints/:code/resolve",
+  need("canResolve", "You do not have permission to resolve complaints."),
+  h(async (req, res) => {
+    const c = await Complaint.findOne({
+      code: req.params.code,
+    });
+
+    if (!c) {
+      throw fail("Complaint not found.", 404);
+    }
+
+    if (c.status !== "Open") {
+      throw fail("This complaint is already resolved.");
+    }
+
+    if (c.fieldVisit?.status !== "Active") {
+      throw fail(
+        "You must start a field visit before resolving this complaint.",
+      );
+    }
+
+    const lat = Number(req.body.lat);
+    const lng = Number(req.body.lng);
+    const accuracy = Number(req.body.accuracy);
+
+    if (!validGps(lat, lng)) {
+      throw fail("A valid GPS location is required.");
+    }
+
+    if (Number.isFinite(accuracy) && accuracy > MAX_GPS_ACCURACY_METERS) {
+      throw fail("GPS accuracy is too low. Please try again from the field.");
+    }
+
+    const check = verifyFieldLocation(c, lat, lng);
+
+    if (!check.verified) {
+      throw fail(
+        `You are outside the allowed complaint location radius. Current distance: ${Math.round(
+          check.distance,
+        )} meters.`,
+      );
+    }
+
+    const note = str(req.body.note);
+
+    if (!note) {
+      throw fail("Resolution note is required.");
+    }
+
+    const photoData = str(req.body.photoData);
+
+    if (!photoData) {
+      throw fail("Photo evidence is required.");
+    }
+
+    if (!photoData.startsWith("data:image/")) {
+      throw fail("Invalid photo evidence.");
+    }
+
+    /*
+     * Safety limit for compressed image data.
+     * Frontend will compress before sending.
+     */
+    if (photoData.length > 700000) {
+      throw fail("Photo is too large. Please capture a smaller image.");
+    }
+
+    if (!c.fieldVisit) {
+      c.fieldVisit = {};
+    }
+
+    c.fieldVisit.status = "Completed";
+
+    c.fieldVisit.completedBy = req.user.username;
+    c.fieldVisit.completedAt = new Date();
+
+    c.fieldVisit.completeLocation = {
+      lat,
+      lng,
+      accuracy: Number.isFinite(accuracy) ? accuracy : null,
+    };
+
+    c.fieldVisit.photoData = photoData;
+
+    c.status = "Resolved";
+    c.resolvedBy = req.user.username;
+    c.resolvedAt = new Date();
+    c.note = note;
+
+    await c.save();
+
+    await logActivity(
+      "resolve",
+      req.user.username,
+      `Ticket ${c.code} (${c.location}) resolved` +
+        ` · Field visit verified` +
+        (note ? ` · ${note}` : ""),
+    );
+
     notify([c.raisedBy], {
-      title: "✅ Complaint resolve ho gayi",
+      title: "✅ Complaint resolved",
       body: `${c.code} · ${c.location}`,
       url: "/#cmp",
     });
-    res.json({ message: "Ticket resolve ho gaya" });
+
+    res.json({
+      message: "Complaint resolved successfully.",
+    });
   }),
 );
 

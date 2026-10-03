@@ -17,7 +17,9 @@ const pub = (u) => ({ username: u.username, name: u.name, perms: perms(u) });
 const need = (k, msg) => (req, res, next) =>
   has(req.user, k)
     ? next()
-    : next(fail(msg || "Aapko iski permission nahi hai", 403));
+    : next(
+        fail(msg || "You do not have permission to perform this action.", 403),
+      );
 
 const auth = h(async (req, res, next) => {
   const t = (req.headers.authorization || "").replace("Bearer ", "");

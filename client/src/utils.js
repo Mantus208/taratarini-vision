@@ -17,16 +17,16 @@ export const today = () =>
   new Date(Date.now() + 19800000).toISOString().slice(0, 10);
 
 export const PERMS = [
-  ["isAdmin", "Admin (poora app control)"],
-  ["canApprove", "Expense/Request approve kar sakta"],
-  ["canViewLedger", "Ledger dekh sakta"],
-  ["canAddIncome", "Income entry kar sakta"],
-  ["canRequest", "Expense/Request bhej sakta"],
-  ["canPurchase", "Kharidi / payment kar sakta"],
-  ["canViewComplaints", "Complaint dekh sakta"],
-  ["canRaiseComplaint", "Complaint raise kar sakta"],
-  ["canResolve", "Complaint resolve kar sakta"],
-  ["canViewActivity", "Activity log dekh sakta"],
+  ["isAdmin", "Admin (full app control)"],
+  ["canApprove", "Can approve expenses/requests"],
+  ["canViewLedger", "Can view ledger"],
+  ["canAddIncome", "Can add income entries"],
+  ["canRequest", "Can submit expenses/requests"],
+  ["canPurchase", "Can make purchases/payments"],
+  ["canViewComplaints", "Can view complaints"],
+  ["canRaiseComplaint", "Can raise complaints"],
+  ["canResolve", "Can resolve complaints"],
+  ["canViewActivity", "Can view activity log"],
 ];
 
 // activity log ke icon aur filter group
