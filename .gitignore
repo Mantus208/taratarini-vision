@@ -1,0 +1,23 @@
+# Packages
+node_modules/
+
+# Secrets (kabhi upload nahi hone chahiye)
+.env
+.env.*
+!.env.example
+
+# Build output
+client/dist/
+dist/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor / OS
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Mongo local backup
+*.bson
