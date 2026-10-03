@@ -144,9 +144,137 @@
 .complaint-empty span {
   font-size: 10px;
 }
+
+/* Field Visit - Resolved Details */
+
+.visit-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.visit-btn {
+  width: 100%;
+  min-width: 0;
+  justify-content: center;
+  text-align: center;
+  white-space: normal;
+}
+
+.visit-evidence-btn {
+  grid-column: 1 / -1;
+}
+
+.visit-gps {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.gps-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 0;
+  padding: 9px 10px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface-soft);
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--muted);
+}
+
+.gps-item span {
+  min-width: 0;
+}
+
+.gps-item strong {
+  flex-shrink: 0;
+  white-space: nowrap;
+  color: var(--text);
+  font-weight: 700;
+}
+
+/* =========================================================
+   FIELD VISIT - RESOLVED DETAILS
+========================================================= */
+
+.visit-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.visit-btn {
+  width: 100%;
+  min-width: 0;
+  justify-content: center;
+  text-align: center;
+  white-space: normal;
+}
+
+.visit-evidence-btn {
+  grid-column: 1 / -1;
+}
+
+.visit-gps {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.gps-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 0;
+  padding: 9px 10px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface-soft);
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--muted);
+}
+
+.gps-item span {
+  min-width: 0;
+}
+
+.gps-item strong {
+  flex-shrink: 0;
+  white-space: nowrap;
+  color: var(--text);
+  font-weight: 700;
+}
 /* =========================================================
    COMPLAINTS - MOBILE
 ========================================================= */
+@media (max-width: 600px) {
+  .visit-actions {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .visit-btn {
+    font-size: 12px;
+    padding: 9px 7px;
+  }
+
+  .visit-gps {
+    grid-template-columns: 1fr;
+  }
+
+  .gps-item {
+    width: 100%;
+  }
+}
 
 @media (max-width: 700px) {
   /* -------------------------

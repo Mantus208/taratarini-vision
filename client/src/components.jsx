@@ -458,19 +458,12 @@ export function CmpCard({ c, P }) {
             Resolved: {nm(c.resolvedBy)} · {fdt(c.resolved)} · {c.note}
           </span>
 
-          <div
-            style={{
-              marginTop: 10,
-              display: "flex",
-              flexWrap: "wrap",
-              gap: 6,
-            }}
-          >
+          <div className="visit-actions">
             {c.fieldVisit?.startLocation?.lat != null &&
               c.fieldVisit?.startLocation?.lng != null && (
                 <button
                   type="button"
-                  className="btn sm gray"
+                  className="btn sm gray visit-btn"
                   onClick={() =>
                     openMap(
                       c.fieldVisit.startLocation.lat,
@@ -486,7 +479,7 @@ export function CmpCard({ c, P }) {
               c.fieldVisit?.completeLocation?.lng != null && (
                 <button
                   type="button"
-                  className="btn sm gray"
+                  className="btn sm gray visit-btn"
                   onClick={() =>
                     openMap(
                       c.fieldVisit.completeLocation.lat,
@@ -501,25 +494,32 @@ export function CmpCard({ c, P }) {
             {c.fieldVisit?.hasPhoto && (
               <button
                 type="button"
-                className="btn sm gray"
+                className="btn sm gray visit-btn visit-evidence-btn"
                 onClick={viewEvidence}
                 disabled={loadingEvidence}
               >
                 📷 {loadingEvidence ? "Loading..." : "View Evidence"}
               </button>
             )}
+          </div>
+
+          <div className="visit-gps">
             {c.fieldVisit?.startLocation?.accuracy != null && (
-              <span className="muted">
-                Start GPS accuracy: ±
-                {Math.round(c.fieldVisit.startLocation.accuracy)} m
-              </span>
+              <div className="gps-item">
+                <span>Start GPS accuracy</span>
+                <strong>
+                  ±{Math.round(c.fieldVisit.startLocation.accuracy)} m
+                </strong>
+              </div>
             )}
 
             {c.fieldVisit?.completeLocation?.accuracy != null && (
-              <span className="muted">
-                Completion GPS accuracy: ±
-                {Math.round(c.fieldVisit.completeLocation.accuracy)} m
-              </span>
+              <div className="gps-item">
+                <span>Completion GPS accuracy</span>
+                <strong>
+                  ±{Math.round(c.fieldVisit.completeLocation.accuracy)} m
+                </strong>
+              </div>
             )}
           </div>
         </>
