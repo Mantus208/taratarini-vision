@@ -64,15 +64,6 @@ function distanceMeters(lat1, lng1, lat2, lng2) {
 }
 
 function verifyFieldLocation(c, lat, lng) {
-  /*
-   * Some old complaints may not have siteLocation.
-   *
-   * Customer does not have to provide GPS when creating
-   * a complaint. In that case, we still capture the
-   * field staff's GPS as field evidence, but we cannot
-   * compare it against a known site.
-   */
-
   const siteLat = Number(c.siteLocation?.lat);
   const siteLng = Number(c.siteLocation?.lng);
 
@@ -637,7 +628,13 @@ router.post(
     }
 
     if (!c.fieldVisit) {
-      c.fieldVisit = {};
+      throw fail("Field visit has not been started.");
+    }
+
+    if (c.fieldVisit.status !== "Active") {
+      throw fail(
+        "You must start a field visit before resolving this complaint.",
+      );
     }
 
     c.fieldVisit.status = "Completed";
