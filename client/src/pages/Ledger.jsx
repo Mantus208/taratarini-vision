@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { act, useFetch } from "../api";
+import { DateInput } from "../components";
 import { inr, fday, nm, today } from "../utils";
 
 export default function Ledger({ me }) {
@@ -16,6 +17,15 @@ export default function Ledger({ me }) {
   const set = (k) => (e) => setF({ ...f, [k]: e.target.value });
 
   const save = async () => {
+    // aaj ki date nahi hai to pehle confirm karo (year ki galti pakadne ke liye)
+    if (
+      f.date &&
+      f.date !== today() &&
+      !confirm(
+        `Entry ki date ${f.date.split("-").reverse().join("/")} hai (aaj ki date nahi hai). Sahi hai?`,
+      )
+    )
+      return;
     if (await act("/income", "POST", f)) setF({ ...f, amount: "", remark: "" });
   };
 
@@ -40,7 +50,10 @@ export default function Ledger({ me }) {
           <div className="row2">
             <div>
               <label>Date</label>
-              <input type="date" value={f.date} onChange={set("date")} />
+              <DateInput
+                value={f.date}
+                onChange={(v) => setF({ ...f, date: v })}
+              />
             </div>
             <div>
               <label>Amount (₹)</label>
@@ -77,18 +90,16 @@ export default function Ledger({ me }) {
           <div className="row2">
             <div>
               <label>Se</label>
-              <input
-                type="date"
+              <DateInput
                 value={flt.from}
-                onChange={(e) => setFlt({ ...flt, from: e.target.value })}
+                onChange={(v) => setFlt({ ...flt, from: v })}
               />
             </div>
             <div>
               <label>Tak</label>
-              <input
-                type="date"
+              <DateInput
                 value={flt.to}
-                onChange={(e) => setFlt({ ...flt, to: e.target.value })}
+                onChange={(v) => setFlt({ ...flt, to: v })}
               />
             </div>
           </div>

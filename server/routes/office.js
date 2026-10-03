@@ -6,7 +6,9 @@ const {
   Source,
   Request,
   Complaint,
+  Activity,
   nextCode,
+  logActivity,
   PERMS,
 } = require("../models");
 const {
@@ -23,6 +25,13 @@ router.use(auth);
 
 const today = () => new Date(Date.now() + 19800000).toISOString().slice(0, 10); // IST
 const str = (v) => String(v || "").trim();
+const dmy = (s) => String(s).split("-").reverse().join("/");
+const SCOPE_TXT = {
+  Single: "Ek customer",
+  Area: "Area (kai customer)",
+  Village: "Poora gaon off",
+  Main: "Main line",
+};
 
 // ---------- names + summary ----------
 router.get(
@@ -93,6 +102,12 @@ router.post(
       remark: str(req.body.remark),
       addedBy: req.user.username,
     });
+    logActivity(
+      "income",
+      req.user.username,
+      `${source} se ₹${amount} aaya (date ${dmy(date)})` +
+        (str(req.body.remark) ? ` · ${str(req.body.remark)}` : ""),
+    );
     res.json({ message: "Income entry ho gayi" });
   }),
 );
@@ -206,7 +221,7 @@ router.post(
     const title = str(req.body.title),
       amount = Number(req.body.amount);
     if (!title) throw fail("Kis cheez ke liye? Title daalo");
-    if (!(amount > 0)) throw fail("Amount (andaaza) daalo");
+    if (!(amount > 0)) throw fail("Amount daalo");
     const r = await Request.create({
       code: await nextCode("R-"),
       type: req.body.type === "Item" ? "Item" : "Expense",
@@ -216,6 +231,11 @@ router.post(
       requestedBy: req.user.username,
       date: today(),
     });
+    logActivity(
+      "request",
+      req.user.username,
+      `Naya request ${r.code}: ${title} · ₹${amount}`,
+    );
     const elig = (await eligible()).filter((x) => x !== req.user.username);
     notify(elig, {
       title: "💸 Naya request: approval chahiye",
@@ -251,6 +271,17 @@ router.post(
     else if (t.no > t.n - t.needN) r.status = "Rejected";
     await r.save();
 
+    logActivity(
+      "vote",
+      req.user.username,
+      `${r.code} (${r.title}) par ${v === "Y" ? "Accept" : "Reject"} kiya` +
+        (r.status === "Approved"
+          ? ": request Approved ho gayi"
+          : r.status === "Rejected"
+            ? ": request Rejected ho gayi"
+            : ""),
+    );
+
     if (r.status === "Approved") {
       notify([r.requestedBy, ...(await usersWith("canPurchase"))], {
         title: "✅ Request approve ho gayi",
@@ -276,8 +307,8 @@ router.post(
     if (!r) throw fail("Request nahi mili", 404);
     if (r.status !== "Approved")
       throw fail("Sirf approved request hi kharidi ja sakti hai");
-    const amt = Number(req.body.amount);
-    if (!(amt > 0)) throw fail("Asli kharcha amount daalo");
+    // Amount approve hui request wali hi jayegi, bahar se koi amount nahi liya jata
+    const amt = r.amount;
     Object.assign(r, {
       status: "Purchased",
       purchasedBy: req.user.username,
@@ -286,12 +317,21 @@ router.post(
       purchaseNote: str(req.body.note),
     });
     await r.save();
+    logActivity(
+      "purchase",
+      req.user.username,
+      `${r.code} (${r.title}) ka payment mark kiya: ₹${amt}` +
+        (str(req.body.note) ? ` · ${str(req.body.note)}` : ""),
+    );
     notify([r.requestedBy], {
       title: "🛒 Kharid ho gaya",
       body: `${r.code} · ${r.title} · ₹${amt}`,
       url: "/#req",
     });
-    res.json({ message: "Kharid mark ho gaya, ledger me kharcha chadh gaya" });
+    res.json({
+      message:
+        "Kharid mark ho gaya, ledger me ₹" + amt + " ka kharcha chadh gaya",
+    });
   }),
 );
 
@@ -369,6 +409,11 @@ router.post(
       description,
       raisedBy: req.user.username,
     });
+    logActivity(
+      "complaint",
+      req.user.username,
+      `Ticket ${c.code} banaya: ${location} · ${SCOPE_TXT[scope]} · ${description.slice(0, 80)}`,
+    );
     const urgent = scope === "Main";
     notify(await usersWith("canResolve", [req.user.username]), {
       title:
@@ -394,12 +439,39 @@ router.post(
       note: str(req.body.note),
     });
     await c.save();
+    logActivity(
+      "resolve",
+      req.user.username,
+      `Ticket ${c.code} (${c.location}) resolve kiya` +
+        (c.note ? ` · ${c.note}` : ""),
+    );
     notify([c.raisedBy], {
       title: "✅ Complaint resolve ho gayi",
       body: `${c.code} · ${c.location}`,
       url: "/#cmp",
     });
     res.json({ message: "Ticket resolve ho gaya" });
+  }),
+);
+
+// ---------- activity log ----------
+router.get(
+  "/activity",
+  need("canViewActivity", "Activity log dekhne ki permission nahi hai"),
+  h(async (req, res) => {
+    const list = await Activity.find()
+      .sort({ createdAt: -1 })
+      .limit(200)
+      .lean();
+    res.json(
+      list.map((a) => ({
+        id: String(a._id),
+        type: a.type,
+        by: a.by,
+        text: a.text,
+        at: a.createdAt,
+      })),
+    );
   }),
 );
 
@@ -437,6 +509,11 @@ router.put(
     )
       throw fail("Apna Admin access ya status khud band nahi kar sakte");
     await t.save();
+    logActivity(
+      "user",
+      req.user.username,
+      `${t.name} ki settings badli (status: ${t.status})`,
+    );
     res.json({ message: t.name + " ki settings save ho gayi" });
   }),
 );
@@ -451,6 +528,7 @@ router.post(
       throw fail("Password kam se kam 6 character ka ho");
     t.passHash = await bcrypt.hash(String(req.body.newPass), 10);
     await t.save();
+    logActivity("user", req.user.username, `${t.name} ka password reset kiya`);
     res.json({ message: t.name + " ka password reset ho gaya" });
   }),
 );

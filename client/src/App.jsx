@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import Ledger from "./pages/Ledger";
 import Requests from "./pages/Requests";
 import Complaints from "./pages/Complaints";
+import Activity from "./pages/Activity";
 import Users from "./pages/Users";
 import Profile from "./pages/Profile";
 
@@ -14,6 +15,7 @@ export default function App() {
   const [ready, setReady] = useState(!getToken());
   const [tab, setTab] = useState(location.hash.slice(1) || "home");
   const [tmsg, setTmsg] = useState(null);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     onToast((m, bad) => {
@@ -53,10 +55,13 @@ export default function App() {
     setToken("");
     setMe(null);
     setTab("home");
+    setOpen(false);
   };
   const go = (t) => {
     setTab(t);
     history.replaceState(null, "", "#" + t);
+    setOpen(false);
+    window.scrollTo(0, 0);
   };
 
   const toastEl = tmsg && (
@@ -66,63 +71,113 @@ export default function App() {
   if (!ready) return <div className="wrap">Loading...</div>;
   if (!me)
     return (
-      <>
-        {<Auth onLogin={setMe} />}
+      <div className="authbg">
+        <Auth onLogin={setMe} />
         {toastEl}
-      </>
+      </div>
     );
   if (!names) return <div className="wrap">Loading...</div>;
 
   const P = me.perms,
     s = sum || {};
-  const tabs = [["home", "🏠 Home", 0]];
-  if (P.canViewLedger || P.canAddIncome) tabs.push(["ledger", "📒 Ledger", 0]);
+  const tabs = [{ id: "home", ic: "🏠", label: "Home" }];
+  if (P.canViewLedger || P.canAddIncome)
+    tabs.push({ id: "ledger", ic: "📒", label: "Ledger" });
   if (P.canRequest || P.canApprove || P.canPurchase)
-    tabs.push(["req", "💸 Requests", s.pendingForMe || 0]);
+    tabs.push({
+      id: "req",
+      ic: "💸",
+      label: "Requests",
+      badge: s.pendingForMe || 0,
+    });
   if (P.canViewComplaints || P.canRaiseComplaint)
-    tabs.push([
-      "cmp",
-      "🎫 Complaints",
-      P.canResolve ? s.openComplaints || 0 : 0,
-    ]);
-  if (P.isAdmin) tabs.push(["users", "👥 Users", 0]);
-  tabs.push(["me", "👤 Profile", 0]);
-  const cur = tabs.some((t) => t[0] === tab) ? tab : "home";
+    tabs.push({
+      id: "cmp",
+      ic: "🎫",
+      label: "Complaints",
+      badge: P.canResolve ? s.openComplaints || 0 : 0,
+    });
+  if (P.canViewActivity)
+    tabs.push({ id: "activity", ic: "🕘", label: "Activity Log" });
+  if (P.isAdmin) tabs.push({ id: "users", ic: "👥", label: "Users" });
+  tabs.push({ id: "me", ic: "👤", label: "Profile" });
+  const cur = tabs.some((t) => t.id === tab) ? tab : "home";
+  const curTab = tabs.find((t) => t.id === cur);
 
   const pages = {
-    home: <Home me={me} sum={s} />,
+    home: <Home me={me} sum={s} go={go} />,
     ledger: <Ledger me={me} />,
     req: <Requests me={me} />,
     cmp: <Complaints me={me} />,
+    activity: <Activity />,
     users: <Users />,
     me: <Profile me={me} />,
   };
 
+  const role = P.isAdmin ? "Admin" : P.canApprove ? "Partner" : "Staff";
+  const dateStr = new Date().toLocaleDateString("en-GB", {
+    weekday: "long",
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+
   return (
-    <>
-      <div className="top">
-        <b>🏢 Taratarini Vision</b>
-        <span>
-          {me.name} &nbsp;
-          <button className="btn sm gray" onClick={logout}>
+    <div className="shell">
+      <aside className={"side" + (open ? " open" : "")}>
+        <div className="brand">
+          <div className="logo">🏢</div>
+          <div>
+            Taratarini Vision<small>OFFICE MANAGER</small>
+          </div>
+        </div>
+        <nav className="navlist">
+          {tabs.map((t) => (
+            <button
+              key={t.id}
+              className={"navitem" + (cur === t.id ? " on" : "")}
+              onClick={() => go(t.id)}
+            >
+              <span className="ic">{t.ic}</span>
+              <span className="lbl">{t.label}</span>
+              {t.badge > 0 && <span className="badge">{t.badge}</span>}
+            </button>
+          ))}
+        </nav>
+        <div className="userbox">
+          <div className="avatar">
+            {(me.name || "?").trim().charAt(0).toUpperCase()}
+          </div>
+          <div className="who">
+            <b>{me.name}</b>
+            <span>{role}</span>
+          </div>
+          <button className="out-btn" onClick={logout}>
             Logout
           </button>
-        </span>
-      </div>
-      <div className="nav">
-        {tabs.map((t) => (
+        </div>
+      </aside>
+      <div
+        className={"overlay" + (open ? " show" : "")}
+        onClick={() => setOpen(false)}
+      />
+      <div className="main">
+        <header className="topbar">
           <button
-            key={t[0]}
-            className={cur === t[0] ? "on" : ""}
-            onClick={() => go(t[0])}
+            className="menu-btn"
+            onClick={() => setOpen(true)}
+            aria-label="Menu"
           >
-            {t[1]}
-            {t[2] > 0 && <span className="badge">{t[2]}</span>}
+            ☰
           </button>
-        ))}
+          <h2>
+            {curTab.ic} {curTab.label}
+          </h2>
+          <span className="date">{dateStr}</span>
+        </header>
+        <div className="wrap">{pages[cur]}</div>
       </div>
-      <div className="wrap">{pages[cur]}</div>
       {toastEl}
-    </>
+    </div>
   );
 }

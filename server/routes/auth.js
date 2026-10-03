@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { User, PERMS } = require("../models");
+const { User, PERMS, logActivity } = require("../models");
 const { fail, h, auth, pub, notify, usersWith } = require("../middleware");
 
 const sign = (u) =>
@@ -39,6 +39,13 @@ router.post(
         (k) => (doc[k] = true),
       );
     await User.create(doc);
+    logActivity(
+      "user",
+      un,
+      "Naya signup: " +
+        doc.name +
+        (first ? " (pehla user, Admin bana)" : " (Admin approval baaki)"),
+    );
 
     if (!first)
       notify(await usersWith("isAdmin"), {
@@ -64,6 +71,7 @@ router.post(
     if (u.status === "Pending")
       throw fail("Admin ne abhi aapko activate nahi kiya");
     if (u.status !== "Active") throw fail("Aapka account band hai");
+    logActivity("auth", u.username, "Login kiya");
     res.json({ token: sign(u), user: pub(u) });
   }),
 );
@@ -78,6 +86,7 @@ router.post(
       throw fail("Naya password kam se kam 6 character ka ho");
     u.passHash = await bcrypt.hash(String(req.body.newPass), 10);
     await u.save();
+    logActivity("auth", u.username, "Secret answer se password badla");
     res.json({ message: "Password badal gaya. Ab login karein." });
   }),
 );
@@ -95,6 +104,7 @@ router.post(
       throw fail("Naya password kam se kam 6 character ka ho");
     req.user.passHash = await bcrypt.hash(String(newPass), 10);
     await req.user.save();
+    logActivity("auth", req.user.username, "Apna password badla");
     res.json({ message: "Password badal gaya" });
   }),
 );

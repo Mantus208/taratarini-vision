@@ -11,6 +11,7 @@ const PERMS = [
   "canViewComplaints",
   "canRaiseComplaint",
   "canResolve",
+  "canViewActivity",
 ];
 const permFields = {};
 PERMS.forEach((k) => (permFields[k] = { type: Boolean, default: false }));
@@ -129,6 +130,27 @@ const Complaint = mongoose.model(
   ),
 );
 
+// ---------- activity log ----------
+const activitySchema = new Schema(
+  {
+    type: String, // income, request, vote, purchase, complaint, resolve, user, auth
+    by: String, // username
+    text: String,
+  },
+  { timestamps: true },
+);
+activitySchema.index({ createdAt: -1 });
+const Activity = mongoose.model("Activity", activitySchema);
+
+// log likhte waqt koi galti ho to app na ruke
+async function logActivity(type, by, text) {
+  try {
+    await Activity.create({ type, by, text });
+  } catch (e) {
+    console.error("activity log error:", e.message);
+  }
+}
+
 const Counter = mongoose.model(
   "Counter",
   new Schema({
@@ -140,9 +162,19 @@ async function nextCode(prefix) {
   const c = await Counter.findByIdAndUpdate(
     prefix,
     { $inc: { seq: 1 } },
-    { new: true, upsert: true },
+    { returnDocument: "after", upsert: true },
   );
   return prefix + String(c.seq).padStart(4, "0");
 }
 
-module.exports = { PERMS, User, Income, Source, Request, Complaint, nextCode };
+module.exports = {
+  PERMS,
+  User,
+  Income,
+  Source,
+  Request,
+  Complaint,
+  Activity,
+  nextCode,
+  logActivity,
+};

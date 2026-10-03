@@ -1,12 +1,114 @@
+import { useState, useRef } from "react";
 import { act } from "./api";
 import { nm, inr, fday, fdt } from "./utils";
 
+// ---------- dd/mm/yyyy date input ----------
+const showDMY = (v) => (v ? v.split("-").reverse().join("/") : "");
+
+function parseDMY(t) {
+  const m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(t);
+  if (!m) return "";
+  const d = +m[1],
+    mo = +m[2],
+    y = +m[3];
+  const dt = new Date(Date.UTC(y, mo - 1, d));
+  if (
+    dt.getUTCFullYear() !== y ||
+    dt.getUTCMonth() !== mo - 1 ||
+    dt.getUTCDate() !== d
+  )
+    return "";
+  return `${m[3]}-${m[2]}-${m[1]}`;
+}
+
+// value aur onChange dono 'yyyy-mm-dd' me hain, screen par dd/mm/yyyy dikhta hai
+export function DateInput({ value, onChange }) {
+  const [text, setText] = useState(showDMY(value));
+  const [prev, setPrev] = useState(value);
+  const pick = useRef(null);
+
+  // bahar se value badle (jaise calendar se chuni), to text bhi usi ke hisaab se badlo
+  if (value !== prev) {
+    setPrev(value);
+    if (value) setText(showDMY(value));
+  }
+
+  const handle = (e) => {
+    const d = e.target.value.replace(/\D/g, "").slice(0, 8);
+    let t = d;
+    if (d.length > 4)
+      t = d.slice(0, 2) + "/" + d.slice(2, 4) + "/" + d.slice(4);
+    else if (d.length > 2) t = d.slice(0, 2) + "/" + d.slice(2);
+    setText(t);
+    onChange(parseDMY(t));
+  };
+
+  const bad = text.length === 10 && !value;
+
+  return (
+    <div style={{ position: "relative" }}>
+      <input
+        type="text"
+        inputMode="numeric"
+        placeholder="dd/mm/yyyy"
+        maxLength={10}
+        value={text}
+        onChange={handle}
+        style={{ paddingRight: 42, ...(bad ? { borderColor: "#dc2626" } : {}) }}
+      />
+      <button
+        type="button"
+        title="Calendar se chuno"
+        onClick={() =>
+          pick.current && pick.current.showPicker && pick.current.showPicker()
+        }
+        style={{
+          position: "absolute",
+          right: 6,
+          top: "50%",
+          transform: "translateY(-50%)",
+          background: "none",
+          border: 0,
+          cursor: "pointer",
+          fontSize: 18,
+          padding: 4,
+        }}
+      >
+        📅
+      </button>
+      <input
+        ref={pick}
+        type="date"
+        tabIndex={-1}
+        value={value || ""}
+        onChange={(e) => onChange(e.target.value)}
+        style={{
+          position: "absolute",
+          right: 0,
+          bottom: 0,
+          width: 1,
+          height: 1,
+          opacity: 0,
+          pointerEvents: "none",
+          padding: 0,
+          border: 0,
+        }}
+      />
+    </div>
+  );
+}
+
+// ---------- request card ----------
 export function ReqCard({ r, P }) {
   const buy = () => {
-    const a = prompt("Asli kharcha kitna hua? (₹)", r.amount);
-    if (a === null) return;
+    if (
+      !confirm(
+        `${inr(r.amount)} ka payment mark karein? Amount badli nahi ja sakti.`,
+      )
+    )
+      return;
     const n = prompt("Remark (optional)", "") || "";
-    act(`/requests/${r.id}/purchase`, "POST", { amount: a, note: n });
+    act(`/requests/${r.id}/purchase`, "POST", { note: n });
   };
   const vote = (x) => act(`/requests/${r.id}/vote`, "POST", { vote: x });
   return (
@@ -57,7 +159,7 @@ export function ReqCard({ r, P }) {
         )}
         {r.status === "Approved" && P.canPurchase && (
           <button className="btn sm gray" onClick={buy}>
-            🛒 Kharid liya / Payment kiya
+            🛒 Kharid liya / Payment kiya ({inr(r.amount)})
           </button>
         )}
       </div>
@@ -65,6 +167,7 @@ export function ReqCard({ r, P }) {
   );
 }
 
+// ---------- complaint card ----------
 const SCOPE = {
   Single: "Ek customer",
   Area: "Area (kai customer)",

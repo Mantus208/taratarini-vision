@@ -44,7 +44,10 @@ export default function Requests({ me }) {
           </select>
           <label>Kis cheez ke liye?</label>
           <input value={f.title} onChange={set("title")} />
-          <label>Amount (andaaza ₹)</label>
+          <label>
+            Amount (₹): approve hone ke baad yahi amount ledger me jayegi, badli
+            nahi ja sakti
+          </label>
           <input
             type="number"
             inputMode="decimal"

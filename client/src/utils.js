@@ -26,4 +26,27 @@ export const PERMS = [
   ["canViewComplaints", "Complaint dekh sakta"],
   ["canRaiseComplaint", "Complaint raise kar sakta"],
   ["canResolve", "Complaint resolve kar sakta"],
+  ["canViewActivity", "Activity log dekh sakta"],
 ];
+
+// activity log ke icon aur filter group
+export const ACT_ICON = {
+  income: "💰",
+  request: "💸",
+  vote: "🗳️",
+  purchase: "🛒",
+  complaint: "🎫",
+  resolve: "✅",
+  user: "👥",
+  auth: "🔐",
+};
+export const ACT_GROUP = {
+  income: "income",
+  request: "request",
+  vote: "request",
+  purchase: "request",
+  complaint: "complaint",
+  resolve: "complaint",
+  user: "user",
+  auth: "user",
+};
