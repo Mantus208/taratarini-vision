@@ -284,13 +284,16 @@ export function CmpCard({ c, P }) {
   const [photo, setPhoto] = useState(c.fieldVisit?.hasPhoto ? "saved" : "");
   const [note, setNote] = useState("");
   const openMap = (lat, lng) => {
-    if (!Number.isFinite(Number(lat)) || !Number.isFinite(Number(lng))) {
+    const latitude = Number(lat);
+    const longitude = Number(lng);
+
+    if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {
       alert("Location coordinates are not available.");
       return;
     }
 
     window.open(
-      `https://www.google.com/maps?q=${lat},${lng}`,
+      `https://www.google.com/maps?q=${latitude},${longitude}`,
       "_blank",
       "noopener,noreferrer",
     );
@@ -455,10 +458,47 @@ export function CmpCard({ c, P }) {
             Resolved: {nm(c.resolvedBy)} · {fdt(c.resolved)} · {c.note}
           </span>
 
-          {c.fieldVisit?.hasPhoto && (
-            <>
-              <br />
+          <div
+            style={{
+              marginTop: 10,
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 6,
+            }}
+          >
+            {c.fieldVisit?.startLocation?.lat != null &&
+              c.fieldVisit?.startLocation?.lng != null && (
+                <button
+                  type="button"
+                  className="btn sm gray"
+                  onClick={() =>
+                    openMap(
+                      c.fieldVisit.startLocation.lat,
+                      c.fieldVisit.startLocation.lng,
+                    )
+                  }
+                >
+                  📍 View Visit Start
+                </button>
+              )}
 
+            {c.fieldVisit?.completeLocation?.lat != null &&
+              c.fieldVisit?.completeLocation?.lng != null && (
+                <button
+                  type="button"
+                  className="btn sm gray"
+                  onClick={() =>
+                    openMap(
+                      c.fieldVisit.completeLocation.lat,
+                      c.fieldVisit.completeLocation.lng,
+                    )
+                  }
+                >
+                  📍 View Completion Location
+                </button>
+              )}
+
+            {c.fieldVisit?.hasPhoto && (
               <button
                 type="button"
                 className="btn sm gray"
@@ -467,8 +507,21 @@ export function CmpCard({ c, P }) {
               >
                 📷 {loadingEvidence ? "Loading..." : "View Evidence"}
               </button>
-            </>
-          )}
+            )}
+            {c.fieldVisit?.startLocation?.accuracy != null && (
+              <span className="muted">
+                Start GPS accuracy: ±
+                {Math.round(c.fieldVisit.startLocation.accuracy)} m
+              </span>
+            )}
+
+            {c.fieldVisit?.completeLocation?.accuracy != null && (
+              <span className="muted">
+                Completion GPS accuracy: ±
+                {Math.round(c.fieldVisit.completeLocation.accuracy)} m
+              </span>
+            )}
+          </div>
         </>
       )}
       {c.status === "Open" && P.canResolve && (
