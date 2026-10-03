@@ -65,14 +65,18 @@ function distanceMeters(lat1, lng1, lat2, lng2) {
 
 function verifyFieldLocation(c, lat, lng) {
   /*
-   * If complaint has a known site location,
-   * enforce radius verification.
+   * Some old complaints may not have siteLocation.
    *
-   * If no known site location exists, GPS is still
-   * captured as field evidence, but exact fault location
-   * cannot be mathematically verified.
+   * Customer does not have to provide GPS when creating
+   * a complaint. In that case, we still capture the
+   * field staff's GPS as field evidence, but we cannot
+   * compare it against a known site.
    */
-  if (c.siteLocation?.lat == null || c.siteLocation?.lng == null) {
+
+  const siteLat = Number(c.siteLocation?.lat);
+  const siteLng = Number(c.siteLocation?.lng);
+
+  if (!Number.isFinite(siteLat) || !Number.isFinite(siteLng)) {
     return {
       verified: true,
       distance: null,
@@ -80,12 +84,7 @@ function verifyFieldLocation(c, lat, lng) {
     };
   }
 
-  const distance = distanceMeters(
-    c.siteLocation.lat,
-    c.siteLocation.lng,
-    lat,
-    lng,
-  );
+  const distance = distanceMeters(siteLat, siteLng, lat, lng);
 
   return {
     verified: distance <= FIELD_RADIUS_METERS,
