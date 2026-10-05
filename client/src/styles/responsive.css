@@ -311,10 +311,26 @@
   .auth-form {
     padding: 20px !important;
   }
-
-  .auth-input-wrap input {
+  .auth-input-wrap {
+    position: relative !important;
+    display: block !important;
+    width: 100% !important;
+  }
+  .auth-input-icon {
+    position: absolute !important;
+    left: 16px !important; /* Icon ko left se thodi jagah dena */
+    top: 50% !important; /* Ekdum center (upar se) */
+    transform: translateY(-50%) !important; /* Perfect vertical center fix */
+    z-index: 2 !important;
+    margin: 0 !important;
     font-size: 16px !important;
-    /* Input padding nahi chhedi hai, taaki Icon aapas me na takraye */
+  }
+  .auth-input-wrap input {
+    width: 100% !important;
+    /* DHYAN DEIN: Yahan 42px left-padding di gayi hai taaki text icon ke baad shuru ho */
+    padding: 14px 16px 14px 42px !important;
+    font-size: 16px !important;
+    box-sizing: border-box !important;
   }
 
   .auth-submit {
