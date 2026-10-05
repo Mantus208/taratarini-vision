@@ -236,21 +236,29 @@
    MOBILE RESPONSIVE FIXES (ADDED NEW)
 ========================================= */
 
-/* 1. Modal Table Fix - Table screen se bahar nahi jayegi aur scroll hogi */
+/* 1. Modal Table Fix - Table ko scrollable banana aur katne se rokna */
 .tbl {
   width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
 .tbl table {
-  min-width: 600px; /* Table ko sikudne nahi dega, balki scroll dega */
+  min-width: 600px;
+}
+/* Yeh text ko katne se rokega */
+.tbl table th,
+.tbl table td {
+  white-space: nowrap;
 }
 
-/* 2. Modal Popup (Sheet) Padding Fix Mobile ke liye */
+/* 2. Modal Popup (Sheet) Padding Fix */
 @media (max-width: 600px) {
   .vc-sheet {
     width: 95%;
     padding: 15px;
+    /* Popup ki maximum height ko set karna taaki wo screen se bahar na jaye */
+    max-height: 90vh;
+    overflow-y: auto;
   }
 }
 
@@ -263,15 +271,21 @@
   }
 
   .vc-stats .vc-stat.net {
-    grid-column: 1 / -1; /* Isse 5th card dono column ki jagah akela le lega */
+    grid-column: 1 / -1;
     text-align: center;
   }
+}
 
-  /* Header ke peeche text na ghuse iske liye vc-head fix */
-  .vc-head {
-    position: relative;
-    z-index: 10;
-    background: #fff;
-    margin-bottom: 15px;
-  }
+/* 4. Top Header Overlap Fix - Header ko solid aur upar rakhna */
+.vc-head {
+  position: relative;
+  z-index: 100; /* Z-index badhaya taaki content uske peeche na aaye */
+  background-color: #ffffff;
+  margin-bottom: 15px;
+}
+
+/* 5. "Band karo" Button Squish Fix */
+.vc-sheet-head button {
+  white-space: nowrap; /* Button ko ek hi line me rakhna */
+  flex-shrink: 0; /* Button ko chota hone se rokna */
 }
