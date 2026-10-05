@@ -279,7 +279,7 @@
 /* 4. Top Header Overlap Fix - Header ko solid aur upar rakhna */
 .vc-head {
   position: relative;
-  z-index: 100; /* Z-index badhaya taaki content uske peeche na aaye */
+  z-index: 2; /* Z-index badhaya taaki content uske peeche na aaye */
   background-color: #ffffff;
   margin-bottom: 15px;
 }
