@@ -274,3 +274,52 @@
     margin-bottom: 5px !important;
   }
 }
+/* =========================================
+   LOGIN SCREEN MOBILE FIXES (EXACT MATCH)
+========================================= */
+
+@media (max-width: 768px) {
+  /* 1. Main container ko full screen karna (bina extra margin ke) */
+  .auth {
+    padding: 0 !important;
+  }
+  .auth-card {
+    border-radius: 0 !important;
+    min-height: 100vh;
+    margin: 0 !important;
+  }
+
+  /* 2. Top section (Brand) se non-essential cheezein chhupana */
+  /* Yeh form ko upar khiska dega taaki keyboard aane par button na chhupe */
+  .auth-brand .auth-features,
+  .auth-brand .auth-brand-description,
+  .auth-brand .auth-brand-footer {
+    display: none !important;
+  }
+
+  /* 3. Top heading ko mobile ke hisaab se adjust karna */
+  .auth-brand h1 {
+    font-size: 24px !important;
+    margin-top: 10px !important;
+    margin-bottom: 0 !important;
+  }
+  .auth-brand {
+    padding: 30px 20px 20px 20px !important;
+  }
+
+  /* 4. Form inputs aur button ko safely touch-friendly banana */
+  .auth-form {
+    padding: 20px !important;
+  }
+
+  .auth-input-wrap input {
+    font-size: 16px !important;
+    /* Input padding nahi chhedi hai, taaki Icon aapas me na takraye */
+  }
+
+  .auth-submit {
+    min-height: 52px !important; /* Button thoda bada aur tap karne me asan */
+    font-size: 16px !important;
+    margin-top: 10px !important;
+  }
+}
