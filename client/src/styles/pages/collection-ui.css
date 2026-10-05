@@ -1,0 +1,234 @@
+/* ---------- banners ---------- */
+.vc-note {
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.vc-note.warn {
+  background: #fffbeb;
+  border: 1px solid #fcd34d;
+  color: #92400e;
+}
+.vc-note.info {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1e40af;
+}
+.vc-note > div {
+  flex: 1;
+  min-width: 220px;
+  line-height: 1.9;
+}
+.vc-chipmini {
+  display: inline-block;
+  background: #fff;
+  border: 1px solid #fcd34d;
+  border-radius: 999px;
+  padding: 1px 10px;
+  margin: 0 4px 2px 0;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+.vc-issues {
+  margin-top: 8px;
+  font-size: 13px;
+}
+.vc-issues summary {
+  cursor: pointer;
+  color: #b45309;
+}
+.vc-issues ul {
+  margin: 6px 0 0;
+  padding-left: 18px;
+  color: #64748b;
+  max-height: 160px;
+  overflow: auto;
+}
+
+/* ---------- package chips (customer ke andar) ---------- */
+.vc-pks {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 270px;
+}
+.vc-pk {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  padding: 3px 8px;
+  border-radius: 8px;
+  background: #f1f5f9;
+}
+.vc-pk i,
+.vc-tag {
+  font-style: normal;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 1px 7px;
+  border-radius: 6px;
+  background: #64748b;
+  color: #fff;
+  letter-spacing: 0.3px;
+}
+.vc-pk.t-Basic i,
+.vc-tag.t-Basic {
+  background: #4f46e5;
+}
+.vc-pk.t-Package i,
+.vc-tag.t-Package {
+  background: #0891b2;
+}
+.vc-pk.t-Addon i,
+.vc-tag.t-Addon {
+  background: #d97706;
+}
+.vc-pk.t-Channel i,
+.vc-tag.t-Channel {
+  background: #059669;
+}
+.vc-pk b {
+  margin-left: auto;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.vc-pk.bad {
+  background: #fffbeb;
+  color: #92400e;
+}
+.vc-nopkg {
+  color: #b45309;
+  font-size: 13px;
+}
+
+/* ---------- settings ---------- */
+.vc-set-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+.vc-prog {
+  height: 8px;
+  background: #e2e8f0;
+  border-radius: 99px;
+  overflow: hidden;
+  margin: 10px 0 6px;
+}
+.vc-prog span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #4f46e5, #7c3aed);
+  border-radius: 99px;
+  transition: width 0.3s;
+}
+.vc-filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 12px 0 8px;
+}
+.vc-filters button {
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  border-radius: 999px;
+  padding: 5px 13px;
+  cursor: pointer;
+  font-size: 13px;
+  font-family: inherit;
+  color: #334155;
+}
+.vc-filters button.on {
+  background: #4f46e5;
+  border-color: #4f46e5;
+  color: #fff;
+}
+.vc-pklist {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+.vc-pkrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #fff;
+  flex-wrap: wrap;
+}
+.vc-pkrow.todo {
+  background: #fffbeb;
+  border-color: #fcd34d;
+}
+.vc-pkinfo {
+  flex: 1;
+  min-width: 200px;
+}
+.vc-pkinfo b {
+  display: block;
+  font-size: 14.5px;
+}
+.vc-pkinfo .muted {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.vc-pkprice {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.vc-pkprice input {
+  width: 110px;
+  text-align: right;
+}
+.vc-pkprice button {
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  border-radius: 8px;
+  padding: 8px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  font-family: inherit;
+}
+.vc-pkprice button:hover {
+  background: #eef2ff;
+}
+.vc-fold {
+  margin-top: 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 10px 14px;
+}
+.vc-fold summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+.vc-savebar {
+  position: sticky;
+  bottom: 0;
+  background: #fff;
+  border-top: 1px solid #e2e8f0;
+  padding: 12px 0;
+  margin-top: 16px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.vc-savebar .btn {
+  margin-top: 0;
+}

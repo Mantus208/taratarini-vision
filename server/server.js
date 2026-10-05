@@ -33,6 +33,7 @@ app.use("/api/auth/forgot", limiter(10));
 app.use("/api/auth/signup", limiter(20));
 
 app.use("/api/auth", require("./routes/auth"));
+app.use("/api/collection", require("./routes/collection"));
 app.use("/api", require("./routes/office"));
 
 // Galat /api route par JSON 404 do (React page nahi)

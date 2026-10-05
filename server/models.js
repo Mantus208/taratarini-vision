@@ -12,6 +12,7 @@ const PERMS = [
   "canRaiseComplaint",
   "canResolve",
   "canViewActivity",
+  "canManageVillage",
 ];
 const permFields = {};
 PERMS.forEach((k) => (permFields[k] = { type: Boolean, default: false }));

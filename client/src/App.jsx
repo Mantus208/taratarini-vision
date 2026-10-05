@@ -9,6 +9,7 @@ import Complaints from "./pages/Complaints";
 import Activity from "./pages/Activity";
 import Users from "./pages/Users";
 import Profile from "./pages/Profile";
+import Collection from "./pages/Collection";
 
 export default function App() {
   const [me, setMe] = useState(null);
@@ -83,6 +84,9 @@ export default function App() {
   const tabs = [{ id: "home", ic: "🏠", label: "Home" }];
   if (P.canViewLedger || P.canAddIncome)
     tabs.push({ id: "ledger", ic: "📒", label: "Ledger" });
+  // canViewLedger ki jagah canManageVillage use karenge
+  if (P.canManageVillage)
+    tabs.push({ id: "collection", ic: "🏘️", label: "Village Collection" });
   if (P.canRequest || P.canApprove || P.canPurchase)
     tabs.push({
       id: "req",
@@ -112,6 +116,7 @@ export default function App() {
     activity: <Activity />,
     users: <Users />,
     me: <Profile me={me} />,
+    collection: <Collection me={me} />,
   };
 
   const role = P.isAdmin ? "Admin" : P.canApprove ? "Partner" : "Staff";

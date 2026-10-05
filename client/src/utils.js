@@ -27,6 +27,7 @@ export const PERMS = [
   ["canRaiseComplaint", "Can raise complaints"],
   ["canResolve", "Can resolve complaints"],
   ["canViewActivity", "Can view activity log"],
+  ["canManageVillage", "Can manage Village Collection"],
 ];
 
 // activity log ke icon aur filter group

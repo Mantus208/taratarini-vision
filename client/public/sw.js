@@ -4,8 +4,9 @@ self.addEventListener("push", (e) => {
   e.waitUntil(
     self.registration.showNotification(d.title || "Taratarini Vision", {
       body: d.body || "",
-      icon: "/icons/icon-192.png",
-      badge: "/icons/icon-192.png",
+      // inko kuch der ke liye hata dijiye testing ke liye:
+      // icon: "/icons/icon-192.png",
+      // badge: "/icons/icon-192.png",
       data: {
         url: d.url || "/",
       },

@@ -67,7 +67,7 @@ router.post(
     const u = await User.findOne({ username: clean(req.body.username) });
     const ok =
       u && (await bcrypt.compare(String(req.body.password || ""), u.passHash));
-    if (!ok) throw fail("Username ya password galat hai");
+    if (!ok) throw fail("Invalid username or password");
     if (u.status === "Pending")
       throw fail("Admin ne abhi aapko activate nahi kiya");
     if (u.status !== "Active") throw fail("Aapka account band hai");

@@ -145,64 +145,9 @@
   font-size: 10px;
 }
 
-/* Field Visit - Resolved Details */
-
-.visit-actions {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-  margin-top: 10px;
-}
-
-.visit-btn {
-  width: 100%;
-  min-width: 0;
-  justify-content: center;
-  text-align: center;
-  white-space: normal;
-}
-
-.visit-evidence-btn {
-  grid-column: 1 / -1;
-}
-
-.visit-gps {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-  margin-top: 8px;
-}
-
-.gps-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  min-width: 0;
-  padding: 9px 10px;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  background: var(--surface-soft);
-  font-size: 12px;
-  line-height: 1.35;
-  color: var(--muted);
-}
-
-.gps-item span {
-  min-width: 0;
-}
-
-.gps-item strong {
-  flex-shrink: 0;
-  white-space: nowrap;
-  color: var(--text);
-  font-weight: 700;
-}
-
 /* =========================================================
    FIELD VISIT - RESOLVED DETAILS
 ========================================================= */
-
 .visit-actions {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -254,6 +199,7 @@
   color: var(--text);
   font-weight: 700;
 }
+
 /* =========================================================
    COMPLAINTS - MOBILE
 ========================================================= */
@@ -277,10 +223,6 @@
 }
 
 @media (max-width: 700px) {
-  /* -------------------------
-     NEW COMPLAINT
-  ------------------------- */
-
   .complaint-create-card {
     padding: 17px;
     border-radius: 16px;
@@ -294,11 +236,8 @@
   .complaint-main-icon {
     width: 38px;
     height: 38px;
-
     flex: 0 0 38px;
-
     border-radius: 11px;
-
     font-size: 16px;
   }
 
@@ -312,7 +251,6 @@
     line-height: 1.35;
   }
 
-  /* Category + Scope */
   .complaint-form .row2 {
     grid-template-columns: 1fr !important;
     gap: 0;
@@ -342,15 +280,9 @@
     width: 100%;
     min-height: 46px;
     margin: 0 !important;
-
     border-radius: 11px;
-
     font-size: 13px;
   }
-
-  /* -------------------------
-     OPEN / RESOLVED HEADER
-  ------------------------- */
 
   .complaint-list-card {
     border-radius: 16px;
@@ -368,11 +300,8 @@
   .complaint-list-icon {
     width: 36px;
     height: 36px;
-
     flex: 0 0 36px;
-
     border-radius: 10px;
-
     font-size: 15px;
   }
 
@@ -388,26 +317,15 @@
   .complaint-count {
     min-width: 28px;
     height: 28px;
-
     padding: 0 8px;
-
     flex: none;
-
     font-size: 11px;
   }
-
-  /* -------------------------
-     LIST CONTENT
-  ------------------------- */
 
   .complaint-list-body {
     padding: 11px 12px 13px;
   }
 
-  /*
-    CmpCard ke andar jo content hai
-    uske liye outer card spacing compact.
-  */
   .complaint-list-body > .card {
     margin-bottom: 8px;
     border-radius: 12px;
@@ -417,10 +335,6 @@
     margin-bottom: 0;
   }
 
-  /* -------------------------
-     EMPTY STATE
-  ------------------------- */
-
   .complaint-empty {
     min-height: 95px;
     padding: 10px;
@@ -429,11 +343,8 @@
   .complaint-empty-icon {
     width: 38px;
     height: 38px;
-
     margin-bottom: 3px;
-
     border-radius: 11px;
-
     font-size: 16px;
   }
 
@@ -443,7 +354,6 @@
 
   .complaint-empty span {
     max-width: 260px;
-
     font-size: 9px;
     line-height: 1.4;
   }
@@ -452,7 +362,6 @@
 /* =========================================================
    SMALL PHONES
 ========================================================= */
-
 @media (max-width: 400px) {
   .complaint-create-card {
     padding: 14px;
@@ -499,4 +408,34 @@
   .complaint-list-body {
     padding: 9px 10px 11px;
   }
+}
+/* Complaints Status Badge Styling */
+.cmp-badge,
+.badge,
+[class*="status"] {
+  font-weight: 700;
+}
+
+/* Agar status text 'Open' hai */
+.cmp-status-open,
+span:contains("Open") {
+  color: #92400e !important;
+  background: #fef3c7 !important;
+}
+
+/* Agar status text 'Resolved' ya 'Done' hai */
+.cmp-status-resolved,
+span:contains("Resolved"),
+span:contains("DONE") {
+  color: #166534 !important;
+  background: #dcfce7 !important;
+}
+.chip.open {
+  color: #92400e;
+  background: #fef3c7 !important;
+}
+
+.chip.resolved {
+  color: #166534;
+  background: #dcfce7 !important;
 }

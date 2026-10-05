@@ -11,18 +11,28 @@ export async function enablePush() {
     throw new Error(
       "Is browser me notification support nahi hai (iPhone par pehle Add to Home Screen karo)",
     );
+
   const perm = await Notification.requestPermission();
   if (perm !== "granted")
     throw new Error("Notification ki permission nahi di gayi");
+
   const { key } = await api("/push/key");
   if (!key) throw new Error("Server par VAPID key set nahi hai");
+
   const reg = await navigator.serviceWorker.register("/sw.js");
   await navigator.serviceWorker.ready;
+
+  // 🔥 MAIN FIX: Pehle check karo ki koi purani kharab ID toh nahi atki hai
   let sub = await reg.pushManager.getSubscription();
-  if (!sub)
-    sub = await reg.pushManager.subscribe({
-      userVisibleOnly: true,
-      applicationServerKey: b64ToUint8(key),
-    });
+  if (sub) {
+    await sub.unsubscribe(); // Purani ID ko force-delete karo
+  }
+
+  // Ab ekdum fresh (nayi) ID generate karo
+  sub = await reg.pushManager.subscribe({
+    userVisibleOnly: true,
+    applicationServerKey: b64ToUint8(key),
+  });
+
   await api("/push/subscribe", "POST", sub.toJSON());
 }

@@ -438,9 +438,7 @@ export function CmpCard({ c, P }) {
   return (
     <div className="card inner">
       <b>{c.id}</b> <span className={"chip " + c.prio}>{c.prio}</span>{" "}
-      <span className="chip" style={{ background: "#475569" }}>
-        {c.status}
-      </span>
+      <span className={"chip " + c.status.toLowerCase()}>{c.status}</span>
       <br />
       <b>{c.location}</b> · {SCOPE[c.scope] || c.scope} · {c.category}
       <br />
