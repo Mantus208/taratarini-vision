@@ -232,3 +232,46 @@
 .vc-savebar .btn {
   margin-top: 0;
 }
+/* =========================================
+   MOBILE RESPONSIVE FIXES (ADDED NEW)
+========================================= */
+
+/* 1. Modal Table Fix - Table screen se bahar nahi jayegi aur scroll hogi */
+.tbl {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.tbl table {
+  min-width: 600px; /* Table ko sikudne nahi dega, balki scroll dega */
+}
+
+/* 2. Modal Popup (Sheet) Padding Fix Mobile ke liye */
+@media (max-width: 600px) {
+  .vc-sheet {
+    width: 95%;
+    padding: 15px;
+  }
+}
+
+/* 3. Top Summary Cards (vc-stats) Fix - Aakhiri card full width lega */
+@media (max-width: 768px) {
+  .vc-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .vc-stats .vc-stat.net {
+    grid-column: 1 / -1; /* Isse 5th card dono column ki jagah akela le lega */
+    text-align: center;
+  }
+
+  /* Header ke peeche text na ghuse iske liye vc-head fix */
+  .vc-head {
+    position: relative;
+    z-index: 10;
+    background: #fff;
+    margin-bottom: 15px;
+  }
+}
