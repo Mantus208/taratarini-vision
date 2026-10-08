@@ -8,7 +8,38 @@ const rateLimit = require("express-rate-limit");
 
 const app = express();
 app.set("trust proxy", 1);
-app.use(helmet({ contentSecurityPolicy: false }));
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+    crossOriginResourcePolicy: { policy: "cross-origin" },
+  }),
+);
+
+// ---------- CORS: client (Static Site) ko server se baat karne dena ----------
+// Render me CORS_ORIGINS = client ka address (https://....onrender.com), koma se kai de sakte ho
+const ALLOWED = (process.env.CORS_ORIGINS || "")
+  .split(",")
+  .map((s) => s.trim().replace(/\/+$/, ""))
+  .filter(Boolean);
+
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (origin && ALLOWED.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader("Vary", "Origin");
+    res.setHeader(
+      "Access-Control-Allow-Headers",
+      "Content-Type, Authorization",
+    );
+    res.setHeader(
+      "Access-Control-Allow-Methods",
+      "GET,POST,PUT,DELETE,OPTIONS",
+    );
+    res.setHeader("Access-Control-Max-Age", "86400");
+  }
+  if (req.method === "OPTIONS") return res.sendStatus(204);
+  next();
+});
 
 // JSON body padhna zaroori hai (photo evidence ke liye limit 2mb)
 app.use(express.json({ limit: "2mb" }));
@@ -19,6 +50,11 @@ app.use((req, res, next) => {
   if (req.body === undefined) req.body = {};
   next();
 });
+
+// server jaaga hai ya nahi dekhne ke liye (login ke bina chalta hai)
+app.get("/api/health", (req, res) =>
+  res.json({ ok: true, time: new Date().toISOString() }),
+);
 
 const limiter = (max) =>
   rateLimit({
@@ -41,21 +77,21 @@ app.use("/api", (req, res) =>
   res.status(404).json({ error: "Ye API route nahi mila" }),
 );
 
-// React build serve karo (production)
+// Agar client ka build isi server ke saath hai (purana mixed setup) to wahi serve karo.
+// Alag server service par client build nahi hota, wahan sirf API ka jawab milta hai.
 const dist = path.join(__dirname, "../client/dist");
-app.use(express.static(dist));
-app.use((req, res, next) => {
-  if (req.method !== "GET") return next();
-  const index = path.join(dist, "index.html");
-  if (!fs.existsSync(index)) {
-    return res
-      .status(404)
-      .send(
-        "Frontend build nahi mila. Development me client alag chalao (npm run dev), ya client me npm run build karo.",
-      );
-  }
-  res.sendFile(index);
-});
+const index = path.join(dist, "index.html");
+if (fs.existsSync(index)) {
+  app.use(express.static(dist));
+  app.use((req, res, next) => {
+    if (req.method !== "GET") return next();
+    res.sendFile(index);
+  });
+} else {
+  app.get("/", (req, res) =>
+    res.json({ ok: true, service: "taratarini-vision-api" }),
+  );
+}
 
 // error handler
 app.use((err, req, res, next) => {

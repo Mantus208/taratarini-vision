@@ -1,4 +1,15 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
+
+// Client alag Static Site par ho to VITE_API_URL me server ka address do
+// (jaise https://taratarini-vision-api.onrender.com). Khali ho to usi address par /api chalega.
+const API_BASE = (import.meta.env.VITE_API_URL || "")
+  .trim()
+  .replace(/\/+$/, "");
+
+// page khulte hi server ko jaga do (free server 15 minute baad so jata hai)
+if (API_BASE) {
+  fetch(API_BASE + "/api/health", { mode: "no-cors" }).catch(() => {});
+}
 
 export const getToken = () => {
   try {
@@ -24,14 +35,21 @@ export const refresh = () => window.dispatchEvent(new Event("ao-refresh"));
 
 export async function api(path, method = "GET", body) {
   const tk = getToken();
-  const res = await fetch("/api" + path, {
-    method,
-    headers: {
-      "Content-Type": "application/json",
-      ...(tk ? { Authorization: "Bearer " + tk } : {}),
-    },
-    body: body ? JSON.stringify(body) : undefined,
-  });
+  let res;
+  try {
+    res = await fetch(API_BASE + "/api" + path, {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+        ...(tk ? { Authorization: "Bearer " + tk } : {}),
+      },
+      body: body ? JSON.stringify(body) : undefined,
+    });
+  } catch {
+    throw new Error(
+      "Server se connect nahi ho paya. Server jag raha ho sakta hai, 1 minute baad dobara try karo.",
+    );
+  }
   const data = await res.json().catch(() => ({}));
   if (res.status === 401 && tk) {
     setToken("");
@@ -45,16 +63,11 @@ export async function api(path, method = "GET", body) {
 export async function act(path, method, body) {
   try {
     const d = await api(path, method, body);
-
-    toast(d.message || "Done");
+    toast(d.message || "Ho gaya");
     refresh();
-
-    return d;
+    return true;
   } catch (e) {
-    if (e.message !== "SESSION_EXPIRED") {
-      toast(e.message, true);
-    }
-
+    if (e.message !== "SESSION_EXPIRED") toast(e.message, true);
     return false;
   }
 }
@@ -62,26 +75,42 @@ export async function act(path, method, body) {
 // data laao, har 30 second aur har refresh par dobara laao
 export function useFetch(path, enabled = true) {
   const [data, setData] = useState(null);
-  const load = useCallback(() => {
-    if (!enabled) {
-      setData(null);
-      return;
-    }
-    api(path)
-      .then(setData)
-      .catch((e) => {
-        if (e.message !== "SESSION_EXPIRED") toast(e.message, true);
-      });
-  }, [path, enabled]);
+
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    load();
-    const t = setInterval(load, 30000);
-    window.addEventListener("ao-refresh", load);
-    return () => {
-      clearInterval(t);
-      window.removeEventListener("ao-refresh", load);
+    if (!enabled) return;
+
+    let cancelled = false;
+
+    const loadData = async () => {
+      try {
+        const result = await api(path);
+
+        if (!cancelled) {
+          setData(result);
+        }
+      } catch (e) {
+        if (!cancelled && e.message !== "SESSION_EXPIRED") {
+          toast(e.message, true);
+        }
+      }
     };
-  }, [load]);
-  return data;
+
+    // Initial load
+    loadData();
+
+    // Refresh every 30 seconds
+    const timer = setInterval(loadData, 30000);
+
+    // Manual refresh event
+    window.addEventListener("ao-refresh", loadData);
+
+    return () => {
+      cancelled = true;
+      clearInterval(timer);
+
+      window.removeEventListener("ao-refresh", loadData);
+    };
+  }, [path, enabled]);
+
+  return enabled ? data : null;
 }
